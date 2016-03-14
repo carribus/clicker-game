@@ -19,7 +19,7 @@ module.exports = [
         classname: 'autoclick',
         name: 'Auto-click 1',
         description: 'Automatically click once per second',
-        price: 100.00,
+        price: 150.00,
         image: 'powerups',
         imageIndex: 0,
         metadata: {
@@ -40,10 +40,22 @@ module.exports = [
         }
     },
     {
+        classname: 'comboboost',
+        name: 'Combo Boost 1',
+        description: 'Decrease the combo threshold to 9 clicks',
+        price: 1000,
+        image: 'powerups',
+        imageIndex: 3,
+        metadata: {
+            comboThreshold: 9,
+            buyOnce: true
+        }
+    },
+    {
         classname: 'rewardincrease',
         name: 'Reward Increase 2',
         description: 'Increase reward per click to 6',
-        price: 600,
+        price: 250,
         image: 'powerup',
         imageIndex: 10,
         metadata: {
@@ -55,7 +67,7 @@ module.exports = [
         classname: 'autoclick',
         name: 'Auto-click 2',
         description: 'Automatically click 3 times per second',
-        price: 250.00,
+        price: 600.00,
         image: 'powerups',
         imageIndex: 8,
         metadata: {
@@ -67,12 +79,24 @@ module.exports = [
         classname: 'critbonus',
         name: 'CritBonus 2',
         description: 'Increase Critical Chance by 10% for 25 seconds',
-        price: 1000.00,
+        price: 1250.00,
         image: 'powerups',
         imageIndex: 9,
         metadata: {
             critChanceIncrease: 0.10,
             expiresAfter: 25*1000
+        }
+    },
+    {
+        classname: 'comboboost',
+        name: 'Combo Boost 2',
+        description: 'Decrease the combo threshold to 8 clicks',
+        price: 10000,
+        image: 'powerups',
+        imageIndex: 11,
+        metadata: {
+            comboThreshold: 8,
+            buyOnce: true
         }
     },
     {
@@ -110,6 +134,18 @@ module.exports = [
         metadata: {
             critChanceIncrease: 0.25,
             expiresAfter: 25*1000
+        }
+    },
+    {
+        classname: 'comboboost',
+        name: 'Combo Boost 3',
+        description: 'Decrease the combo threshold to 7 clicks',
+        price: 15000,
+        image: 'powerups',
+        imageIndex: 19,
+        metadata: {
+            comboThreshold: 7,
+            buyOnce: true
         }
     }
 

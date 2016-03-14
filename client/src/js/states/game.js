@@ -15,7 +15,7 @@ module.exports = (function() {
     var _lastTick = Date.now();
 
     var _activePowerups = {};
-    var POWERUPS_PER_LINE = 3;
+    var POWERUPS_PER_LINE = 4;
     var POWERUP_LINES = 3;
 
     var _powerups = [];

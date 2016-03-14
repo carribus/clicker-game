@@ -102,6 +102,14 @@ module.exports = (function () {
         return _critChance;
     };
 
+    ClickerEngine.prototype.comboClickThreshold = function() {
+        return _comboClickThreshold;
+    };
+
+    ClickerEngine.prototype.setComboClickThreshold = function(v) {
+        _comboClickThreshold = v;
+    };
+
     ClickerEngine.prototype.comboRewardMultiplier = function() {
         return Math.round(_comboRewardMultiplier*100)/100;
     }

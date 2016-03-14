@@ -13,8 +13,6 @@ function CritBonusPowerup(config) {
     this.appliedTimestamp = null;
     this.expiryTimestamp = null;
 
-    console.log(this);
-
     this.onTick = function(_clickEngine) {
         if ( !this.applied ) {
             this.applied = true;
