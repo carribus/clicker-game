@@ -9,6 +9,6 @@ function ComboBoostPowerup(config) {
     this.buyOnce = config.comboThreshold;
 
     this.onTick = function(clickEngine) {
-        clickEngine.
+        clickEngine.setComboClickThreshold(this.comboThreshold);
     }
 }
