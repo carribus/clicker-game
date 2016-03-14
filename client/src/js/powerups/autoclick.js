@@ -4,9 +4,11 @@
 
 module.exports = AutoClickPowerup;
 
+// TODO: Implement time based expiry on auto clicking
+
 function AutoClickPowerup(config) {
     this.clicks_per_second = config.clicks_per_second;
-    this.expires = config.expires;
+    this.expiresAfter = config.expiresAfter;
     this.buyOnce = config.buyOnce;
     this.lastTime = Date.now();
 

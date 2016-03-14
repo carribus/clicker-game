@@ -31,7 +31,7 @@ module.exports = (function () {
         if ( Date.now() - _lastClick < 500 ) {
             if ( canCombo ) {
                 _comboClickCount++;
-                if ( _comboClickCount >= _comboClickThreshold ) {
+                if ( _comboClickCount >= _comboClickThreshold-1 ) {
                     _comboClickCount = 0;
                     _comboRewardMultiplier += 0.01;
                 }
