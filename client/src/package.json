@@ -1,0 +1,11 @@
+{
+  "name": "clicker-game",
+  "version": "0.0.1",
+  "main": "src/js/main.js",
+  "author": "Peter Mares",
+  "dependencies": {
+    "beefy": "^2.1.6",
+    "browserify": "^13.0.0",
+    "phaser": "^2.4.6"
+  }
+}
