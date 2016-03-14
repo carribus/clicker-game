@@ -53,11 +53,11 @@ module.exports = (function () {
 
         _score += reward.value;
         _score = Math.round(_score * 100) / 100;
-        _clickCount++;
 
         this.dispatchEvent('reward', reward);
 
         if ( canCombo ) {
+            _clickCount++;
             _lastClick = Date.now();
         }
     };
