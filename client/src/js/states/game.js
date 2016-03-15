@@ -82,44 +82,16 @@ module.exports = (function() {
         });
     };
 
-    function playerHasPurchasedPowerup(player, powerup) {
-        return player.purchasedPowerups.some(function(i) {
-            return (i.classname == powerup.classname && i.name == powerup.name);
-        })
-    }
-
     o.update = function() {
-        _clickSummary.setText(generateClickText());
+        _clickSummary.setText(this._generateClickText());
 
         // process game powerup effects
-        var powerupKeys = Object.keys(_activePowerups);
-        for ( var i = 0, len = powerupKeys.length; i < len; i++ ) {
-            _activePowerups[powerupKeys[i]].onTick(_clickEngine);
-            if ( _activePowerups[powerupKeys[i]].expired ) {
-                console.log('Removing powerup: ' + powerupKeys[i]);
-                delete _activePowerups[powerupKeys[i]];
-            }
-        }
-
-        // process click animations
-        for ( var i = 0, len = _clickTextObjects.length; i < len; i++ ) {
-            var o = _clickTextObjects[i];
-            if (o.alpha > 0 ) {
-                o.y -= 2;
-                o.alpha -= 0.02;
-            } else {
-                _clickTextObjects.splice(i--, 1);
-                len--;
-                o.kill();
-            }
-        }
+        this._processGamePowerupEffects();
+        this._processClickAnimations();
 
         // save the player every second
         if ( Date.now() - _lastTick > 1000 ) {
-            this.game.player.score = _clickEngine.score();
-            this.game.player.clicks = _clickEngine.clickCount();
-            this.game.player.crits = _clickEngine.critCount();
-            localStorage.setItem('player', JSON.stringify(this.game.player));
+            this._savePlayerObject();
         }
     };
 
@@ -132,6 +104,43 @@ module.exports = (function() {
         }));
 
         _score += value.value;
+    };
+
+    o._processGamePowerupEffects = function() {
+        var powerupKeys = Object.keys(_activePowerups);
+        for ( var i = 0, len = powerupKeys.length; i < len; i++ ) {
+            _activePowerups[powerupKeys[i]].onTick(_clickEngine);
+            if ( _activePowerups[powerupKeys[i]].expired ) {
+                console.log('Removing powerup: ' + powerupKeys[i]);
+                delete _activePowerups[powerupKeys[i]];
+            }
+        }
+    };
+
+    o._processClickAnimations = function() {
+        for ( var i = 0, len = _clickTextObjects.length; i < len; i++ ) {
+            var o = _clickTextObjects[i];
+            if (o.alpha > 0 ) {
+                o.y -= 2;
+                o.alpha -= 0.02;
+            } else {
+                _clickTextObjects.splice(i--, 1);
+                len--;
+                o.kill();
+            }
+        }
+    };
+
+    o._savePlayerObject = function() {
+        this.game.player.score = _clickEngine.score();
+        this.game.player.clicks = _clickEngine.clickCount();
+        this.game.player.crits = _clickEngine.critCount();
+        localStorage.setItem('player', JSON.stringify(this.game.player));
+    };
+
+    o._generateClickText = function() {
+        return 'Score: ' + _clickEngine.score() + ' | Clicks: ' + _clickEngine.clickCount() + ' | Crits: ' + _clickEngine.critCount() +
+            ' | Crit%: ' + (_clickEngine.critChance()*100).toFixed(2) + '% | Combo: x' + _clickEngine.comboRewardMultiplier();
     };
 
     function onPowerupClicked(target, pointer) {
@@ -148,10 +157,12 @@ module.exports = (function() {
         }
     }
 
-    function generateClickText() {
-        return 'Score: ' + _clickEngine.score() + ' | Clicks: ' + _clickEngine.clickCount() + ' | Crits: ' + _clickEngine.critCount() +
-               ' | Crit%: ' + (_clickEngine.critChance()*100).toFixed(2) + '% | Combo: x' + _clickEngine.comboRewardMultiplier();
+    function playerHasPurchasedPowerup(player, powerup) {
+        return player.purchasedPowerups.some(function(i) {
+            return (i.classname == powerup.classname && i.name == powerup.name);
+        })
     }
+
 
     return o;
 })();

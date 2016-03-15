@@ -56,32 +56,6 @@ module.exports = (function() {
         PowerupList.forEach(function(powerup) {
             shop.add('powerups', powerup);
         });
-/*
-        shop.add('powerups', {
-            classname: 'autoclick',
-            name: 'Auto-click 1',
-            description: 'Automatically click once per second',
-            price: 100.00,
-            image: 'powerups',
-            imageIndex: 0,
-            metadata: {
-                clicks_per_second: 1,
-                expiresAfter: 0
-            }
-        });
-        shop.add('powerups', {
-            classname: 'critbonus',
-            name: 'CritBonus 1',
-            description: 'Increase Critical Chance by 5% for 10 seconds',
-            price: 250.00,
-            image: 'powerups',
-            imageIndex: 1,
-            metadata: {
-                critChanceIncrease: 0.05,
-                expiresAfter: 10*1000
-            }
-        })
-*/
     }
 
     function generateID() {
