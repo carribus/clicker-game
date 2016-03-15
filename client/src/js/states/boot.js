@@ -10,6 +10,10 @@ module.exports = (function() {
     var o = {};
 
     o.preload = function() {
+        // force portrait mode
+        this.scale.forceOrientation(false, true);
+        this.scale.refresh();
+
     };
 
     o.create = function() {

@@ -7,9 +7,11 @@ module.exports = {
         port: 5555
     },
     display: {
+        width: window.innerWidth,
+        height: window.innerHeight
         //width: window.innerWidth * window.devicePixelRatio,
         //height: window.innerHeight * window.devicePixelRatio
-        width: 1024,
-        height: 768
+        //width: 1024,
+        //height: 768
     }
 };

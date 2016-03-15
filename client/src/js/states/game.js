@@ -59,7 +59,9 @@ module.exports = (function() {
             if ( !playerHasPurchasedPowerup(this.game.player, powerup) || !powerup.metadata.buyOnce) {
                 powerupSprite = this.game.add.sprite(0, 0, 'powerups', powerup.imageIndex)
                 powerupSprite.shopItem = powerup;
-                powerupSprite.x = (i%POWERUPS_PER_LINE) * 60;
+                powerupSprite.width *= settings.display.dpi;
+                powerupSprite.height *= settings.display.dpi;
+                powerupSprite.x = (i%POWERUPS_PER_LINE) * powerupSprite.width;
                 powerupSprite.y = settings.display.height - (powerupSprite.height * (POWERUP_LINES-Math.floor(i/POWERUPS_PER_LINE)));
                 powerupSprite.inputEnabled = true;
                 powerupSprite.events.onInputUp.add(onPowerupClicked);
