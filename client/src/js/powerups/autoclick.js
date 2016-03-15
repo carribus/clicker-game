@@ -21,7 +21,7 @@ function AutoClickPowerup(config) {
     this.onTick = function(clickEngine) {
         var now = Date.now();
 
-        if ( now <= this.expiryTimestamp || !this.expireTimestamp ) {
+        if ( now <= this.expiryTimestamp || !this.expiryTimestamp ) {
             if ( now - this.lastTime > 1000 / this.clicks_per_second ) {
                 clickEngine.click({x: 200, y: 200}, false);
                 this.lastTime = Date.now();

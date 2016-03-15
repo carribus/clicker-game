@@ -18,10 +18,7 @@ module.exports = (function() {
     var POWERUPS_PER_LINE = 4;
     var POWERUP_LINES = 3;
 
-    var _powerups = [];
-
     o.preload = function() {
-
     };
 
     o.create = function() {

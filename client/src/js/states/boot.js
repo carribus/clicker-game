@@ -4,7 +4,6 @@
 
 module.exports = (function() {
     var settings = require('../../settings');
-    //var ClickerEnginePlugin = require('../plugins/clickerplugin');
     var ClickerEngine = require('../engine/clickerengine');
     var ShopEngine = require('../engine/shopengine');
     var PowerupList = require('../powerups/poweruplist');
