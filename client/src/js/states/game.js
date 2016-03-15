@@ -94,11 +94,14 @@ module.exports = (function() {
 
     o.onReward = function(value) {
         var pt = value.metaData;
-        _clickTextObjects.push(this.game.add.text(pt.x, pt.y, value.value, {
-            font: '16pt Arial',
+        var txt = this.game.add.text(pt.x, pt.y, value.value, {
+            font: value.isCritical ? 'bold 18pt Arial' : '16pt Arial',
             align: 'center',
-            fill: value.isCritical ? "#FFFF80" : "#FFFFFF"
-        }));
+            fill: value.isCritical ? "#FF8080" : "#FFFFFF"
+        });
+
+        txt.anchor.set(0.5, 0.5);
+        _clickTextObjects.push(txt);
 
         _score += value.value;
     };
