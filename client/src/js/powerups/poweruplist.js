@@ -24,7 +24,7 @@ module.exports = [
         imageIndex: 0,
         metadata: {
             clicks_per_second: 1,
-            buyOnce: true
+            expiresAfter: 60*1000
         }
     },
     {
@@ -72,7 +72,7 @@ module.exports = [
         imageIndex: 8,
         metadata: {
             clicks_per_second: 3,
-            buyOnce: true
+            expiresAfter: 60*1000
         }
     },
     {
@@ -120,8 +120,7 @@ module.exports = [
         imageIndex: 16,
         metadata: {
             clicks_per_second: 6,
-            expiresAfter: 0,
-            buyOnce: true
+            expiresAfter: 60*1000
         }
     },
     {
