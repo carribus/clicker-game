@@ -22,6 +22,7 @@ module.exports = (function() {
     var _lastTick = Date.now();
 
     var _activePowerups = {};
+
     var POWERUPS_PER_LINE = 4;
     var POWERUP_LINES = 3;
 
@@ -67,7 +68,7 @@ module.exports = (function() {
         _progressBars.bonusProgress.progress = this.game.player.bonusProgress;
         _progressBars.bonusProgress.refresh()
 
-        // create the powerup shot item sprites (buttons)
+        // create the powerup shop item sprites (buttons)
         var powerupSprite;
         var powerupArray = this.game.shop.items('powerups');
         for ( var i = 0, len = powerupArray.length; i < len; i++ ) {
@@ -94,7 +95,7 @@ module.exports = (function() {
                 powerupSprite.addChild(powerupText);
 
                 powerupText = this.game.add.text(0, 0, powerup.name, {
-                    font: '10pt Arial',
+                    font: '8pt Arial',
                     align: 'center',
                     boundsAlignH: 'center',
                     boundsAlignV: 'top',
