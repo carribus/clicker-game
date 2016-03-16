@@ -8,9 +8,16 @@ module.exports = (function() {
     var PowerupFactory = require('../powerups/powerupfactory');
     var settings = require('../../settings');
 
+    var ProgressBar = require('../objects/progressbar');
+
     var _clickEngine;
     var _clickSummary;
     var _clickTextObjects = [];
+
+    var _progressBars = {
+        clickProgress: null,
+        bonusProgress: null
+    };
 
     var _lastTick = Date.now();
 
@@ -32,23 +39,31 @@ module.exports = (function() {
 
         // create the click area
         var clickGraphic = this.game.add.graphics(0, 0);
-        clickGraphic.beginFill(0x60600B);
-        clickGraphic.drawRect(0, 0, settings.display.width, 400);
-        var clickArea = this.game.add.sprite(0, 50);
+        clickGraphic.beginFill(0x80C080);
+        clickGraphic.drawRect(0, 0, settings.display.width, 600);
+        var clickArea = this.game.add.sprite(0, 75);
         clickArea.addChild(clickGraphic);
         clickArea.inputEnabled = true;
         clickArea.events.onInputDown.add(function(target, pointer) {
             _clickEngine.click(pointer.positionDown, true);
+            _progressBars.clickProgress.progress += 0.002;
+            _progressBars.clickProgress.refresh();
         });
 
         _clickSummary = this.game.add.text(0, 0, _clickEngine.clickCount(), {
             font: '16pt Arial',
             align: 'center',
-            boundsAlignH: 'left',
-            boundsAlignV: 'top',
+            boundsAlignH: 'center',
+            boundsAlignV: 'center',
             fill: 'white'
         });
-        _clickSummary.setTextBounds(10, 10, 150, 0);
+        _clickSummary.setTextBounds(5, 22, settings.display.width, 0);
+
+        // create a progress bar
+        _progressBars.clickProgress = new ProgressBar(this.game, 5, 5, settings.display.width-10, 10, '#8080FF', '#606060');
+        this.game.world.add(_progressBars.clickProgress);
+        _progressBars.bonusProgress = new ProgressBar(this.game, 5, 55, settings.display.width-10, 10, '#FF8080', '#606060');
+        this.game.world.add(_progressBars.bonusProgress);
 
         // create the powerup shot item sprites (buttons)
         var powerupSprite;

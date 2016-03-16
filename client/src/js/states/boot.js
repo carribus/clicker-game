@@ -11,18 +11,16 @@ module.exports = (function() {
 
     o.preload = function() {
         // force portrait mode
-        this.scale.forceOrientation(false, true);
-        this.scale.refresh();
-
+        if ( !this.game.device.desktop ) {
+            this.scale.forceOrientation(false, true);
+            this.scale.refresh();
+        }
     };
 
     o.create = function() {
 
         // ensure that during scaling, the original proportions are maintained
         this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-
-        // set the background colour
-        this.game.stage.backgroundColor = '#161616';
 
         // start the physics system
         //this.game.physics.startSystem(Phaser.Physics[settings.physicsEngine]);
