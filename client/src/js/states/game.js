@@ -46,8 +46,6 @@ module.exports = (function() {
         clickArea.inputEnabled = true;
         clickArea.events.onInputDown.add(function(target, pointer) {
             _clickEngine.click(pointer.positionDown, true);
-            _progressBars.clickProgress.progress += 0.002;
-            _progressBars.clickProgress.refresh();
         });
 
         _clickSummary = this.game.add.text(0, 0, _clickEngine.clickCount(), {
@@ -59,11 +57,15 @@ module.exports = (function() {
         });
         _clickSummary.setTextBounds(5, 22, settings.display.width, 0);
 
-        // create a progress bar
+        // create the progress bars
         _progressBars.clickProgress = new ProgressBar(this.game, 5, 5, settings.display.width-10, 10, '#8080FF', '#606060');
         this.game.world.add(_progressBars.clickProgress);
         _progressBars.bonusProgress = new ProgressBar(this.game, 5, 55, settings.display.width-10, 10, '#FF8080', '#606060');
         this.game.world.add(_progressBars.bonusProgress);
+        _progressBars.clickProgress.progress = this.game.player.clickProgress;
+        _progressBars.clickProgress.refresh()
+        _progressBars.bonusProgress.progress = this.game.player.bonusProgress;
+        _progressBars.bonusProgress.refresh()
 
         // create the powerup shot item sprites (buttons)
         var powerupSprite;
@@ -76,17 +78,30 @@ module.exports = (function() {
                 powerupSprite.shopItem = powerup;
                 powerupSprite.width *= settings.display.dpi;
                 powerupSprite.height *= settings.display.dpi;
-                powerupSprite.x = (i%POWERUPS_PER_LINE) * powerupSprite.width;
+                powerupSprite.x = (i%POWERUPS_PER_LINE) * powerupSprite.width*2;
                 powerupSprite.y = settings.display.height - (powerupSprite.height * (POWERUP_LINES-Math.floor(i/POWERUPS_PER_LINE)));
                 powerupSprite.inputEnabled = true;
                 powerupSprite.events.onInputUp.add(onPowerupClicked);
 
-                var priceText = this.game.add.text(0, 0, '$' + powerup.price, {
+                var powerupText = this.game.add.text(0, 0, '$' + powerup.price, {
                     font: '10pt Arial',
                     align: 'center',
+                    boundsAlignH: 'center',
+                    boundsAlignV: 'bottom',
                     fill: 'white'
                 });
-                powerupSprite.addChild(priceText);
+                powerupText.setTextBounds(0, 0, powerupSprite.width, powerupSprite.height);
+                powerupSprite.addChild(powerupText);
+
+                powerupText = this.game.add.text(0, 0, powerup.name, {
+                    font: '10pt Arial',
+                    align: 'center',
+                    boundsAlignH: 'center',
+                    boundsAlignV: 'top',
+                    fill: 'white'
+                });
+                powerupText.setTextBounds(0, 0, powerupSprite.width, powerupSprite.height);
+                powerupSprite.addChild(powerupText);
             }
         }
 
@@ -104,13 +119,14 @@ module.exports = (function() {
         this._processClickAnimations();
 
         // save the player every second
-        if ( Date.now() - _lastTick > 1000 ) {
+        if ( Date.now() - _lastTick > settings.gameMechanics.delayBetweenPlayerSaveMS ) {
             this._savePlayerObject();
         }
     };
 
     o.onReward = function(value) {
         var pt = value.metaData;
+        var clickProgress = _progressBars.clickProgress;
         var txt = this.game.add.text(pt.x, pt.y, value.value, {
             font: value.isCritical ? 'bold 18pt Arial' : '16pt Arial',
             align: 'center',
@@ -119,6 +135,14 @@ module.exports = (function() {
 
         txt.anchor.set(0.5, 0.5);
         _clickTextObjects.push(txt);
+
+        clickProgress.progress += settings.gameMechanics.clickProgressIncrement * (value.isCritical ? settings.gameMechanics.clickProgressCritMultiplier : 1);
+        clickProgress.refresh();
+
+        if ( clickProgress.progress >= 1 ) {
+            // Click Progress completed! Do something cool!
+            clickProgress.progress = 0;
+        }
 
         _score += value.value;
     };
@@ -139,7 +163,7 @@ module.exports = (function() {
             var o = _clickTextObjects[i];
             if (o.alpha > 0 ) {
                 o.y -= 2;
-                o.alpha -= 0.02;
+                o.alpha -= 0.01;
             } else {
                 _clickTextObjects.splice(i--, 1);
                 len--;
@@ -152,6 +176,8 @@ module.exports = (function() {
         this.game.player.score = _clickEngine.score();
         this.game.player.clicks = _clickEngine.clickCount();
         this.game.player.crits = _clickEngine.critCount();
+        this.game.player.clickProgress = _progressBars.clickProgress.progress;
+        this.game.player.bonusProgress = _progressBars.bonusProgress.progress;
         localStorage.setItem('player', JSON.stringify(this.game.player));
     };
 

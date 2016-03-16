@@ -13,5 +13,10 @@ module.exports = {
         //height: window.innerHeight * window.devicePixelRatio
         //width: 1024,
         //height: 768
+    },
+    gameMechanics: {
+        delayBetweenPlayerSaveMS: 1000,
+        clickProgressIncrement: 0.001,
+        clickProgressCritMultiplier: 2
     }
 };

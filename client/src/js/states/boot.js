@@ -13,6 +13,9 @@ module.exports = (function() {
         // force portrait mode
         if ( !this.game.device.desktop ) {
             this.scale.forceOrientation(false, true);
+            this.scale.enterIncorrectOrientation.add(function() {
+                // generic handler for when the device is rotated into the incorrect orientation
+            });
             this.scale.refresh();
         }
     };
