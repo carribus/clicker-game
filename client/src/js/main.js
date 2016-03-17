@@ -18,6 +18,7 @@
     Game.state.add('preload', require('./states/preload'));
     //Game.state.add('mainmenu', require('./states/mainmenu'));
     Game.state.add('game', require('./states/game'));
+    Game.state.add('travel', require('./states/travel'));
 
     Game.state.start('boot');
 

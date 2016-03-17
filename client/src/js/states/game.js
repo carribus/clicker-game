@@ -75,7 +75,7 @@ module.exports = (function() {
             var powerup = powerupArray[i];
 
             if ( !playerHasPurchasedPowerup(this.game.player, powerup) || !powerup.metadata.buyOnce) {
-                powerupSprite = this.game.add.sprite(0, 0, 'powerups', powerup.imageIndex)
+                powerupSprite = this.game.add.sprite(0, 0, 'powerups', powerup.imageIndex);
                 powerupSprite.shopItem = powerup;
                 powerupSprite.width *= settings.display.dpi;
                 powerupSprite.height *= settings.display.dpi;

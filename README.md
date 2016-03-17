@@ -1,6 +1,12 @@
 # clicker-game
 An exploration of building a clicker/idle style game
 
+## Todo
+
+- Write a hexagon display object
+- Create the travel screen
+- Create the spacemap screen
+
 
 ## Notes
 
