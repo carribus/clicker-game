@@ -143,6 +143,7 @@ module.exports = (function() {
 
         if ( clickProgress.progress >= 1 ) {
             // Click Progress completed! Do something cool!
+            _clickEngine.setComboRewardMultiplier( _clickEngine.comboRewardMultiplier() + 1 );
             clickProgress.progress = 0;
         }
 

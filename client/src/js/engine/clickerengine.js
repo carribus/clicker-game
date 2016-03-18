@@ -114,7 +114,11 @@ module.exports = (function () {
 
     ClickerEngine.prototype.comboRewardMultiplier = function() {
         return Math.round(this._comboRewardMultiplier*100)/100;
-    }
+    };
+
+    ClickerEngine.prototype.setComboRewardMultiplier = function(v) {
+        this._comboRewardMultiplier = v;
+    };
 
     ClickerEngine.prototype.subscribe = function(type, callback) {
         this._subscribers[type] = this._subscribers[type] || [];

@@ -78,7 +78,7 @@ module.exports = (function() {
         this.updateDistanceBar();
 
         if ( this.game.player.distanceTravelled >= this.game.player.distanceToTravel ) {
-            this.state.start('game');
+            this.state.start('mining');
         }
     };
 

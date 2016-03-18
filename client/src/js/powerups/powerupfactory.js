@@ -7,7 +7,8 @@ module.exports = (function() {
     var _powerupObjects = {
         autoclick: require('./autoclick'),
         critbonus: require('./critbonus'),
-        rewardincrease: require('./rewardincrease')
+        rewardincrease: require('./rewardincrease'),
+        comboboost: require('./comboboost')
     };
 
     o.createPowerup = function(classname, data) {
