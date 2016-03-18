@@ -7,10 +7,12 @@ module.exports = (function() {
     var Settings = require('../../settings');
     var ClickerEngine = require('../engine/clickerengine');
     var ProgressBar = require('../objects/progressbar');
+    var Starfield = require('../objects/starfield');
 
     var _clickEngine;
     var _clickArea;
     var _clickTextObjects = [];
+    var _starfield;
     var _spaceShip;
     var _distanceBar;
     var _lastTick = Date.now();
@@ -26,6 +28,10 @@ module.exports = (function() {
 
         this.game.player.distanceToTravel = 100000;
         this.game.player.distanceTravelled = 0;
+
+        _starfield = new Starfield(this.game, 0, 0, Settings.display.width, Settings.display.height, 50);
+        this.game.world.add(_starfield);
+        _starfield.update();
 
         _spaceShip = this.game.add.sprite(100, Settings.display.height/2, 'spaceship', 0);
         _spaceShip.anchor.set(0.5, 0.5);
@@ -66,7 +72,7 @@ module.exports = (function() {
     };
 
     o.onReward = function(value) {
-        var pt = value.metaData;
+        var pt = value.metaData.pos;
 
         var txt = this.game.add.text(pt.x, pt.y, value.value, {
             font: '16pt Arial',
