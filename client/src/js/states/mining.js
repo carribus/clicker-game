@@ -39,17 +39,6 @@ module.exports = (function() {
         _clickEngine.setCritCount(this.game.player.crits);
         _clickEngine.subscribe('reward', this.onReward.bind(this));
 
-        // create the click area
-        //var clickGraphic = this.game.add.graphics(0, 0);
-        //clickGraphic.beginFill(0x80C080);
-        //clickGraphic.drawRect(0, 0, settings.display.width, 600);
-        //var clickArea = this.game.add.sprite(0, 75);
-        //clickArea.addChild(clickGraphic);
-        //clickArea.inputEnabled = true;
-        //clickArea.events.onInputDown.add(function(target, pointer) {
-        //    _clickEngine.click(pointer.positionDown, true);
-        //});
-
         _clickSummary = this.game.add.text(0, 0, _clickEngine.clickCount(), {
             font: '16pt Arial',
             align: 'center',
@@ -90,14 +79,6 @@ module.exports = (function() {
             });
             _asteroids.push(asteroid);
         }
-
-        //var clickArea = this.game.add.sprite(0, 0);
-        //clickArea.width = settings.display.width;
-        //clickArea.height = settings.display.height;
-        //clickArea.inputEnabled = true;
-        //clickArea.events.onInputDown.add(function(target, pointer) {
-        //    _clickEngine.click(pointer.positionDown, true);
-        //});
 
         // create the powerup shop item sprites (buttons)
         var powerupSprite;
@@ -152,7 +133,6 @@ module.exports = (function() {
 
         _asteroids.forEach(function(a) {
             a.animations.play('rotate');
-            //a.angle += 0.1
         });
 
         // save the player every second
@@ -243,7 +223,8 @@ module.exports = (function() {
 
     o._generateClickText = function() {
         return 'Score: ' + _clickEngine.score() + ' | Clicks: ' + _clickEngine.clickCount() + ' | Crits: ' + _clickEngine.critCount() +
-            ' | Crit%: ' + (_clickEngine.critChance()*100).toFixed(2) + '% | Combo: x' + _clickEngine.comboRewardMultiplier();
+            ' | Crit%: ' + (_clickEngine.critChance()*100).toFixed(2) + '% | Combo: x' + _clickEngine.comboRewardMultiplier() +
+            ' | Asteroids: ' + _asteroids.length;
     };
 
     function onPowerupClicked(target, pointer) {
