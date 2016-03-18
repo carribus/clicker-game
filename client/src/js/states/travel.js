@@ -14,6 +14,7 @@ module.exports = (function() {
     var _spaceShip;
     var _distanceBar;
     var _lastTick = Date.now();
+    var _animationType = 'cruise';
 
     o.preload = function() {
     };
@@ -34,13 +35,15 @@ module.exports = (function() {
         _distanceBar = new ProgressBar(this.game, 10, 25, Settings.display.width-20, 10, '#C0C0FF', '#404080');
         this.game.world.add(_distanceBar);
 
+        this.game.add.sprite(-40, 0, 'pirate');
+
         // create a clickable area over the whole thing
         _clickArea = this.game.add.sprite(0, 0);
         _clickArea.width = Settings.display.width;
         _clickArea.height = Settings.display.height;
         _clickArea.inputEnabled = true;
         _clickArea.events.onInputDown.add(function(target, pointer) {
-            _clickEngine.click(pointer.positionDown, false);
+            _clickEngine.click({pos: pointer.positionDown, target: target}, false);
         });
     };
 
@@ -48,7 +51,7 @@ module.exports = (function() {
         this.game.player.distanceTravelled += Settings.gameMechanics.distanceIdleIncrement;
         this.updateDistanceBar();
         this.processClickAnimations();
-        _spaceShip.animations.play('cruise');
+        _spaceShip.animations.play(_animationType);
 
         // save the player every second
         if ( Date.now() - _lastTick > Settings.gameMechanics.delayBetweenPlayerSaveMS ) {
@@ -58,7 +61,7 @@ module.exports = (function() {
     };
 
     o.shutdown = function() {
-        console.log('State shutting down');
+        console.log('Travel State shutting down');
         _clickArea.kill();
     };
 

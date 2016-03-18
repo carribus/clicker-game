@@ -9,6 +9,7 @@ module.exports = (function() {
         this.load.spritesheet('powerups', 'assets/images/powerups.png', 60, 63);
         this.load.spritesheet('spaceship', 'assets/images/ship_sheet.png', 135, 69);
         this.load.spritesheet('asteroid', 'assets/images/asteroid_spritesheet.png', 128, 128);
+        this.load.spritesheet('pirate', 'assets/images/yuara_pirate.png');
         //this.load.spritesheet('spaceship', 'assets/images/ship_sheet.jpeg', 56, 99);
     };
 

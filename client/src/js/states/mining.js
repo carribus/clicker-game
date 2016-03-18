@@ -74,10 +74,9 @@ module.exports = (function() {
         for ( var i = 0; i < numAsteroids; i ++ ) {
             var asteroid = this.game.add.sprite(settings.display.width/2, settings.display.height/2, 'asteroid', 0);
             asteroid.scale.set(1 + Math.floor(Math.random() * 3));
-            asteroid.x = 100 + Math.random()*(settings.display.width - asteroid.width);
-            asteroid.y = 150 + Math.random()*(settings.display.height - asteroid.height);
-            console.log(asteroid.x + ', ' + asteroid.y);
-            asteroid.anchor.set(0.5, 0.5);
+            asteroid.x = 100 + Math.random()*(settings.display.width - 100 - asteroid.width);
+            asteroid.y = 150 + Math.random()*(settings.display.height - 150 - asteroid.height*2);
+            //asteroid.anchor.set(0.5, 0.5);
             var asteroidFrameArray = [];
             for ( var j = 0; j < 31; j++ ) asteroidFrameArray.push(j);
             asteroid.animations.add('rotate', asteroidFrameArray, 10, true);
@@ -153,6 +152,7 @@ module.exports = (function() {
 
         _asteroids.forEach(function(a) {
             a.animations.play('rotate');
+            //a.angle += 0.1
         });
 
         // save the player every second
@@ -178,8 +178,25 @@ module.exports = (function() {
         clickProgress.progress += settings.gameMechanics.clickProgressIncrement * (value.isCritical ? settings.gameMechanics.clickProgressCritMultiplier : 1);
         clickProgress.refresh();
 
-        console.log(target.health);
-        target.damage(value.value);
+        if ( !target && _asteroids.length > 0 ) {
+            target = _asteroids[Math.floor(Math.random() * _asteroids.length)];
+            txt.x = target.x + target.width/2;
+            txt.y = target.y + target.height/2;
+        }
+        if ( target ) {
+            console.log(target.health);
+            target.damage(value.value);
+        }
+
+        if ( !target.alive ) {
+            for ( var i = 0; i < _asteroids.length; i++ ) {
+                if ( _asteroids[i] == target ) {
+                    _asteroids.splice(i, 1);
+                    console.log('removed asteroid - ' + _asteroids.length + ' asteroids remaining');
+                    break;
+                }
+            }
+        }
 
         if ( clickProgress.progress >= 1 ) {
             // Click Progress completed! Do something cool!

@@ -11,7 +11,8 @@ An exploration of building a clicker/idle style game
         - Asteroids
         - Other ships
 - Mining Screen
-    - Implement objects to represent the target being mined
+    - Fix the 'powerups' layout
+    - Decide if powerups still make sense or if there should be 'mining upgrades' that are purchased and installed at spaceports
 - Create the Attack screen
 - Create the spacemap screen
 
