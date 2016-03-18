@@ -14,12 +14,16 @@
         ''
     );
 
+    Game.savePlayerObject = function() {
+        if (this.player) {
+            localStorage.setItem('player', JSON.stringify(this.player));
+        }
+    };
+
     Game.state.add('boot', require('./states/boot'));
     Game.state.add('preload', require('./states/preload'));
-    //Game.state.add('mainmenu', require('./states/mainmenu'));
     Game.state.add('game', require('./states/game'));
     Game.state.add('travel', require('./states/travel'));
 
     Game.state.start('boot');
-
 })();

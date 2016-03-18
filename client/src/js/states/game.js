@@ -122,6 +122,7 @@ module.exports = (function() {
         // save the player every second
         if ( Date.now() - _lastTick > settings.gameMechanics.delayBetweenPlayerSaveMS ) {
             this._savePlayerObject();
+            _lastTick = Date.now();
         }
     };
 
@@ -179,7 +180,7 @@ module.exports = (function() {
         this.game.player.crits = _clickEngine.critCount();
         this.game.player.clickProgress = _progressBars.clickProgress.progress;
         this.game.player.bonusProgress = _progressBars.bonusProgress.progress;
-        localStorage.setItem('player', JSON.stringify(this.game.player));
+        this.game.savePlayerObject();
     };
 
     o._generateClickText = function() {

@@ -10,9 +10,10 @@ module.exports = (function() {
 
     var _clickEngine;
     var _clickArea;
+    var _clickTextObjects = [];
     var _spaceShip;
     var _distanceBar;
-    var _totalDistance, _distanceTravelled;
+    var _lastTick = Date.now();
 
     o.preload = function() {
     };
@@ -20,9 +21,10 @@ module.exports = (function() {
     o.create = function() {
         _clickEngine = new ClickerEngine();
         _clickEngine.subscribe('reward', this.onReward.bind(this));
+        _clickEngine.setReward(Settings.gameMechanics.distanceClickIncrement);
 
-        _totalDistance = 100000;
-        _distanceTravelled = 0;
+        this.game.player.distanceToTravel = 100000;
+        this.game.player.distanceTravelled = 0;
 
         _spaceShip = this.game.add.sprite(100, Settings.display.height/2, 'spaceship', 0);
         _spaceShip.anchor.set(0.5, 0.5);
@@ -38,14 +40,21 @@ module.exports = (function() {
         _clickArea.height = Settings.display.height;
         _clickArea.inputEnabled = true;
         _clickArea.events.onInputDown.add(function(target, pointer) {
-            _clickEngine.click(pointer.positionDown, true);
+            _clickEngine.click(pointer.positionDown, false);
         });
     };
 
     o.update = function() {
-        _distanceTravelled += 2.5;
+        this.game.player.distanceTravelled += Settings.gameMechanics.distanceIdleIncrement;
         this.updateDistanceBar();
+        this.processClickAnimations();
         _spaceShip.animations.play('cruise');
+
+        // save the player every second
+        if ( Date.now() - _lastTick > Settings.gameMechanics.delayBetweenPlayerSaveMS ) {
+            this.game.savePlayerObject();
+            _lastTick = Date.now();
+        }
     };
 
     o.shutdown = function() {
@@ -56,19 +65,41 @@ module.exports = (function() {
     o.onReward = function(value) {
         var pt = value.metaData;
 
-        console.log('Travel onReward');
-        _distanceTravelled += 20;
+        var txt = this.game.add.text(pt.x, pt.y, value.value, {
+            font: '16pt Arial',
+            align: 'center',
+            fill: "#FFFFFF"
+        });
+
+        txt.anchor.set(0.5, 0.5);
+        _clickTextObjects.push(txt);
+
+        this.game.player.distanceTravelled += Settings.gameMechanics.distanceClickIncrement;
         this.updateDistanceBar();
 
-        if ( _distanceTravelled >= _totalDistance ) {
+        if ( this.game.player.distanceTravelled >= this.game.player.distanceToTravel ) {
             this.state.start('game');
         }
     };
 
     o.updateDistanceBar = function() {
-        _distanceBar.progress = _distanceTravelled / _totalDistance;
+        _distanceBar.progress = this.game.player.distanceTravelled / this.game.player.distanceToTravel;
         _distanceBar.refresh();
-    }
+    };
+
+    o.processClickAnimations = function() {
+        for ( var i = 0, len = _clickTextObjects.length; i < len; i++ ) {
+            var o = _clickTextObjects[i];
+            if (o.alpha > 0 ) {
+                o.y -= 2;
+                o.alpha -= 0.01;
+            } else {
+                _clickTextObjects.splice(i--, 1);
+                len--;
+                o.kill();
+            }
+        }
+    };
 
     return o;
 })();
