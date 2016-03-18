@@ -16,6 +16,7 @@
 
     Game.savePlayerObject = function() {
         if (this.player) {
+            this.player.lastState = this.state.getCurrentState().key;
             localStorage.setItem('player', JSON.stringify(this.player));
         }
     };

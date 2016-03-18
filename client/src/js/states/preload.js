@@ -12,8 +12,11 @@ module.exports = (function() {
     };
 
     o.create = function() {
+        var lastState = this.game.player.lastState || 'travel';
+        lastState = 'travel';
+
         // lets move along!
-        this.state.start('travel');
+        this.state.start(lastState);
 
     };
 
