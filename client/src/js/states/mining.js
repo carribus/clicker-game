@@ -13,6 +13,7 @@ module.exports = (function() {
     var _clickEngine;
     var _clickSummary;
     var _clickTextObjects = [];
+    var _asteroids = [];
 
     var _progressBars = {
         clickProgress: null,
@@ -39,15 +40,15 @@ module.exports = (function() {
         _clickEngine.subscribe('reward', this.onReward.bind(this));
 
         // create the click area
-        var clickGraphic = this.game.add.graphics(0, 0);
-        clickGraphic.beginFill(0x80C080);
-        clickGraphic.drawRect(0, 0, settings.display.width, 600);
-        var clickArea = this.game.add.sprite(0, 75);
-        clickArea.addChild(clickGraphic);
-        clickArea.inputEnabled = true;
-        clickArea.events.onInputDown.add(function(target, pointer) {
-            _clickEngine.click(pointer.positionDown, true);
-        });
+        //var clickGraphic = this.game.add.graphics(0, 0);
+        //clickGraphic.beginFill(0x80C080);
+        //clickGraphic.drawRect(0, 0, settings.display.width, 600);
+        //var clickArea = this.game.add.sprite(0, 75);
+        //clickArea.addChild(clickGraphic);
+        //clickArea.inputEnabled = true;
+        //clickArea.events.onInputDown.add(function(target, pointer) {
+        //    _clickEngine.click(pointer.positionDown, true);
+        //});
 
         _clickSummary = this.game.add.text(0, 0, _clickEngine.clickCount(), {
             font: '16pt Arial',
@@ -64,9 +65,40 @@ module.exports = (function() {
         _progressBars.bonusProgress = new ProgressBar(this.game, 5, 55, settings.display.width-10, 10, '#FF8080', '#606060');
         this.game.world.add(_progressBars.bonusProgress);
         _progressBars.clickProgress.progress = this.game.player.clickProgress;
-        _progressBars.clickProgress.refresh()
+        _progressBars.clickProgress.refresh();
         _progressBars.bonusProgress.progress = this.game.player.bonusProgress;
-        _progressBars.bonusProgress.refresh()
+        _progressBars.bonusProgress.refresh();
+
+        // create the asteroid(s)
+        var numAsteroids = 3 + Math.floor(Math.random()*10);
+        for ( var i = 0; i < numAsteroids; i ++ ) {
+            var asteroid = this.game.add.sprite(settings.display.width/2, settings.display.height/2, 'asteroid', 0);
+            asteroid.scale.set(1 + Math.floor(Math.random() * 3));
+            asteroid.x = 100 + Math.random()*(settings.display.width - asteroid.width);
+            asteroid.y = 150 + Math.random()*(settings.display.height - asteroid.height);
+            console.log(asteroid.x + ', ' + asteroid.y);
+            asteroid.anchor.set(0.5, 0.5);
+            var asteroidFrameArray = [];
+            for ( var j = 0; j < 31; j++ ) asteroidFrameArray.push(j);
+            asteroid.animations.add('rotate', asteroidFrameArray, 10, true);
+
+            asteroid.maxHealth = 1000 * asteroid.scale.x;
+            asteroid.health = asteroid.maxHealth;
+
+            asteroid.inputEnabled = true;
+            asteroid.events.onInputDown.add(function(target, pointer) {
+                _clickEngine.click({pos: pointer.positionDown, target: target}, true);
+            });
+            _asteroids.push(asteroid);
+        }
+
+        //var clickArea = this.game.add.sprite(0, 0);
+        //clickArea.width = settings.display.width;
+        //clickArea.height = settings.display.height;
+        //clickArea.inputEnabled = true;
+        //clickArea.events.onInputDown.add(function(target, pointer) {
+        //    _clickEngine.click(pointer.positionDown, true);
+        //});
 
         // create the powerup shop item sprites (buttons)
         var powerupSprite;
@@ -119,6 +151,10 @@ module.exports = (function() {
         this._processGamePowerupEffects();
         this._processClickAnimations();
 
+        _asteroids.forEach(function(a) {
+            a.animations.play('rotate');
+        });
+
         // save the player every second
         if ( Date.now() - _lastTick > settings.gameMechanics.delayBetweenPlayerSaveMS ) {
             this._savePlayerObject();
@@ -127,7 +163,8 @@ module.exports = (function() {
     };
 
     o.onReward = function(value) {
-        var pt = value.metaData;
+        var pt = value.metaData.pos;
+        var target = value.metaData.target;
         var clickProgress = _progressBars.clickProgress;
         var txt = this.game.add.text(pt.x, pt.y, value.value, {
             font: value.isCritical ? 'bold 18pt Arial' : '16pt Arial',
@@ -140,6 +177,9 @@ module.exports = (function() {
 
         clickProgress.progress += settings.gameMechanics.clickProgressIncrement * (value.isCritical ? settings.gameMechanics.clickProgressCritMultiplier : 1);
         clickProgress.refresh();
+
+        console.log(target.health);
+        target.damage(value.value);
 
         if ( clickProgress.progress >= 1 ) {
             // Click Progress completed! Do something cool!

@@ -4,7 +4,15 @@ An exploration of building a clicker/idle style game
 ## Todo
 
 - Write a hexagon display object
-- Create the travel screen
+- Travel Screen
+    - Watch an Ad button
+    - Hyperdrive button
+    - Add random encounters
+        - Asteroids
+        - Other ships
+- Mining Screen
+    - Implement objects to represent the target being mined
+- Create the Attack screen
 - Create the spacemap screen
 
 
