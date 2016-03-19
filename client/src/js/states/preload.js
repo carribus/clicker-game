@@ -15,7 +15,7 @@ module.exports = (function() {
 
     o.create = function() {
         var lastState = this.game.player.lastState || 'travel';
-        //lastState = 'travel';
+        lastState = 'starmap';
 
         // lets move along!
         this.state.start(lastState);

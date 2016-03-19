@@ -24,6 +24,7 @@
     Game.state.add('boot', require('./states/boot'));
     Game.state.add('preload', require('./states/preload'));
     Game.state.add('travel', require('./states/travel'));
+    Game.state.add('starmap', require('./states/starmap'));
     Game.state.add('mining', require('./states/mining'));
 
     Game.state.start('boot');
