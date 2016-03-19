@@ -22,9 +22,14 @@ module.exports = (function() {
             }
             hex = new Polygon(this.game, x, y, size, 6);
             hex.inputEnabled = true;
-            hex.events.onInputOver.add(function(target, point) {
+            hex.events.onInputOver.add(function(target, pointer) {
                 target.fillColour = '#502050';
                 target.strokeColour = '#FFA0A0'
+                target.refresh();
+            });
+            hex.events.onInputOut.add(function(target, pointer) {
+                target.fillColour = '#202050';
+                target.strokeColour = '#A0A0FF'
                 target.refresh();
             });
             this.game.world.add(hex);
