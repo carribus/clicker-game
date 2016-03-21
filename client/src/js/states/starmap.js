@@ -16,8 +16,6 @@ module.exports = (function() {
 
     o.create = function() {
         this.createStarmap();
-        var b = _starmap.getLocalBounds();
-        console.log(b);
     };
 
     o.update = function() {
@@ -26,7 +24,7 @@ module.exports = (function() {
 
     o.createStarmap = function() {
         var _this = this;
-        var numColumns = 11, numRows = 9;
+        var numColumns = 5, numRows = 5;
         var hex, x = 0, y = 0;
         var size = 120;
         var right = 0, bottom = 0;
