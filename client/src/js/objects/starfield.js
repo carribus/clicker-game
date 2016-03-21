@@ -7,6 +7,7 @@ module.exports = Starfield;
 function Starfield(game, x, y, width, height, numStars) {
     this.stars = this._generateStars(numStars, width, height);
     this.bmp = game.add.bitmapData(width, height);
+    this.lastTick = Date.now();
 
     Phaser.Sprite.call(this, game, x, y, this.bmp);
     this.update();
@@ -18,43 +19,47 @@ Starfield.prototype.constructor = Starfield;
 Starfield.prototype.update = function() {
     var colour;
 
-    this.bmp.clear();
+    if ( Date.now() - this.lastTick > 20 ) {
+        this.bmp.clear();
 
-    this.bmp.ctx.fillStyle = '#000000';
-    this.bmp.ctx.fillRect(0, 0, this.width, this.height);
+        this.bmp.ctx.fillStyle = '#000000';
+        this.bmp.ctx.fillRect(0, 0, this.width, this.height);
 
-    for ( var i = 0, len = this.stars.length; i < len; i++ ) {
-        star = this.stars[i];
+        for (var i = 0, len = this.stars.length; i < len; i++) {
+            star = this.stars[i];
 
-        // update the stars position
-        star.x -= (5 - star.z);
-        if ( star.x < 0 ) {
-            star.x = this.width;
+            // update the stars position
+            star.x -= (5 - star.z)*2;
+            if (star.x < 0) {
+                star.x = this.width;
+            }
+
+            switch (star.z) {
+                case 0:
+                    colour = '#FFFFFF';
+                    break;
+
+                case 1:
+                    colour = '#CCCCCC';
+                    break;
+
+                case 2:
+                    colour = '#909090';
+                    break;
+
+                case 3:
+                    colour = '#505050';
+                    break;
+            }
+
+            this.bmp.ctx.fillStyle = colour;
+            this.bmp.ctx.fillRect(star.x, star.y, 2, 2);
         }
 
-        switch ( star.z ) {
-            case 0:
-                colour = '#FFFFFF';
-                break;
+        this.bmp.dirty = true;
 
-            case 1:
-                colour = '#CCCCCC';
-                break;
-
-            case 2:
-                colour = '#909090';
-                break;
-
-            case 3:
-                colour = '#505050';
-                break;
-        }
-
-        this.bmp.ctx.fillStyle = colour;
-        this.bmp.ctx.fillRect(star.x, star.y, 2, 2);
+        this.lastTick = Date.now();
     }
-
-    this.bmp.dirty = true;
 };
 
 Starfield.prototype._generateStars = function(numStars, width, height) {

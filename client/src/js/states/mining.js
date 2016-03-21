@@ -34,9 +34,9 @@ module.exports = (function() {
         _score = 0;
 
         _clickEngine = new ClickerEngine();
-        _clickEngine.setScore(this.game.player.score);
-        _clickEngine.setClickCount(this.game.player.clicks);
-        _clickEngine.setCritCount(this.game.player.crits);
+        _clickEngine.setScore(this.game.player.score || 0);
+        _clickEngine.setClickCount(this.game.player.clicks || 0);
+        _clickEngine.setCritCount(this.game.player.crits || 0);
         _clickEngine.subscribe('reward', this.onReward.bind(this));
 
         _clickSummary = this.game.add.text(0, 0, _clickEngine.clickCount(), {
@@ -53,9 +53,9 @@ module.exports = (function() {
         this.game.world.add(_progressBars.clickProgress);
         _progressBars.bonusProgress = new ProgressBar(this.game, 5, 55, settings.display.width-10, 10, '#FF8080', '#606060');
         this.game.world.add(_progressBars.bonusProgress);
-        _progressBars.clickProgress.progress = this.game.player.clickProgress;
+        _progressBars.clickProgress.progress = this.game.player.clickProgress || 0;
         _progressBars.clickProgress.refresh();
-        _progressBars.bonusProgress.progress = this.game.player.bonusProgress;
+        _progressBars.bonusProgress.progress = this.game.player.bonusProgress || 0;
         _progressBars.bonusProgress.refresh();
 
         // create the asteroid(s)
@@ -156,6 +156,7 @@ module.exports = (function() {
         _clickTextObjects.push(txt);
 
         clickProgress.progress += settings.gameMechanics.clickProgressIncrement * (value.isCritical ? settings.gameMechanics.clickProgressCritMultiplier : 1);
+        console.log(clickProgress.progress);
         clickProgress.refresh();
 
         if ( !target && _asteroids.length > 0 ) {
