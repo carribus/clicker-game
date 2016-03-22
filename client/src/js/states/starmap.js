@@ -2,6 +2,114 @@
  * Created by petermares on 19/03/2016.
  */
 
+var STARMAP_DEFINITION = [
+    {
+        cellType: 'empty'
+    },
+    {
+        cellType: 'asteroids'
+    },
+    {
+        cellType: 'empty'
+    },
+    {
+        cellType: 'asteroids'
+    },
+    {
+        cellType: 'empty'
+    },
+    {
+        cellType: 'asteroids'
+    },
+    {
+        cellType: 'empty'
+    },
+    {
+        cellType: 'asteroids'
+    },
+    {
+        cellType: 'empty'
+    },
+    {
+        cellType: 'asteroids'
+    },
+    {
+        cellType: 'empty'
+    },
+    {
+        cellType: 'asteroids'
+    },
+    {
+        cellType: 'empty'
+    },
+    {
+        cellType: 'asteroids'
+    },
+    {
+        cellType: 'empty'
+    },
+    {
+        cellType: 'asteroids'
+    },
+    {
+        cellType: 'empty'
+    },
+    {
+        cellType: 'asteroids'
+    },
+    {
+        cellType: 'empty'
+    },
+    {
+        cellType: 'asteroids'
+    },
+    {
+        cellType: 'empty'
+    },
+    {
+        cellType: 'asteroids'
+    },
+    {
+        cellType: 'empty'
+    },
+    {
+        cellType: 'asteroids'
+    },
+    {
+        cellType: 'empty'
+    },
+    {
+        cellType: 'asteroids'
+    },
+    {
+        cellType: 'empty'
+    },
+    {
+        cellType: 'asteroids'
+    },
+    {
+        cellType: 'empty'
+    },
+    {
+        cellType: 'asteroids'
+    },
+    {
+        cellType: 'empty'
+    },
+    {
+        cellType: 'asteroids'
+    },
+    {
+        cellType: 'empty'
+    },
+    {
+        cellType: 'asteroids'
+    },
+    {
+        cellType: 'empty'
+    }
+];
+
 module.exports = (function() {
     var o = {};
     var Settings = require('../../settings');
@@ -13,7 +121,9 @@ module.exports = (function() {
     var _starmap;
     var _selectedHex;
     var _playerHex;
-    var _pirate;
+    var _pirate, _asteroid
+    var _btnTravel;
+
     var _lastTick = Date.now();
 
     o.preload = function() {
@@ -27,21 +137,48 @@ module.exports = (function() {
 
         // create the starmap
         this.createStarmap();
+
         // create the pirate sprite
         _pirate = this.game.add.sprite(0, 0, 'pirate');
         _pirate.anchor.set(0.5, 0.5);
         _pirate.scale.set(0.4);
 
+        // create the travel button
+        var text = this.game.add.text(0, 0, 'Travel', {
+            font: '24pt Arial',
+            align: 'center',
+            boundsAlignH: 'center',
+            boundsAlignV: 'center',
+            fill: 'white'
+        });
+        _btnTravel = this.game.add.sprite(Settings.display.width/2, Settings.display.height - 100);
+        _btnTravel.addChild(text);
+        _btnTravel.anchor.set(0.5, 0.5);
+        _btnTravel.inputEnabled = true;
+        _btnTravel.events.onInputDown.add(this.onTravelButtonPressed.bind(this));
+        _btnTravel.visible = false;
+
+        // refresh the starmap with the correct colouring per cell
         var index = this.game.player.mapIndex;
         _playerHex = _starmap.getChildAt(index);
         this.refreshStarmap();
         this.highlightHex(_playerHex, true);
-
         this.game.player.mapIndex = index;
 
+        // position the player marker correctly on the map
         _pirate.x = _starmap.x + _playerHex.center().x + 6;
         _pirate.y = _starmap.y + _playerHex.center().y + 2;
     };
+
+    o.onTravelButtonPressed = function(target) {
+        if ( _selectedHex ) {
+            this.game.player.travel = {
+                fromHex: this.game.player.mapIndex,
+                toHex: _selectedHex.index
+            };
+            this.game.state.start('travel');
+        }
+    }
 
     o.update = function() {
         // save the player every second
@@ -73,6 +210,7 @@ module.exports = (function() {
 
             hex = new Polygon(this.game, x, y, size, 6, fillColour, strokeColour);
             hex.index = i;
+            hex.alpha = 0.75;
             hex.inputEnabled = true;
 
             hex.events.onInputOver.add(function(target, pointer) {
@@ -92,9 +230,9 @@ module.exports = (function() {
                     }
                     _this.selectHex(target, true);
                     _this.game.player.mapIndex = target.index;
+
+                    _this.showTravelButton(true);
                 }
-                //console.log(target.index + ' hex selected (w: ' + (target.x + target.width) + ')');
-                //console.log(_selectedHex.index + ' hex unselected: ' + _selectedHex.index%numColumns + ', ' + Math.floor(_selectedHex.index/numRows));
             });
             _starmap.addChild(hex);
 
@@ -119,8 +257,24 @@ module.exports = (function() {
                 hex.strokeColour = strokeColour;
                 hex.refresh();
             }
-        }
 
+            console.log(i + ' - ' + STARMAP_DEFINITION[i].cellType)
+            switch ( STARMAP_DEFINITION[i].cellType ) {
+                case    'asteroids':
+                    // create the asteroid sprite
+                    _asteroid = this.game.add.sprite(0, 0, 'asteroid', 0);
+                    _asteroid.anchor.set(0.5);
+                    _asteroid.scale.set(0.5);
+                    _asteroid.x = _starmap.x + hex.center().x;
+                    _asteroid.y = _starmap.y + hex.center().y;
+                    this.game.world.sendToBack(_asteroid);
+                    break;
+                case    'empty':
+                default:
+                    break;
+            }
+
+        }
     };
 
     o.highlightHex = function(hex, highlightOn) {
@@ -149,14 +303,16 @@ module.exports = (function() {
     };
 
     o.isHexAdjacent = function(src, target) {
-        sCenter = src.center();
-        tCenter = target.center();
+        var distance = HEX_SIZE*1;
+        var sCenter = src.center();
+        var tCenter = target.center();
 
-        if ( Math.abs(sCenter.x-tCenter.x) <= HEX_SIZE && Math.abs(sCenter.y - tCenter.y) <= HEX_SIZE ) {
-            return true;
-        }
-        return false;
+        return ( Math.abs(sCenter.x-tCenter.x) <= distance && Math.abs(sCenter.y - tCenter.y) <= distance );
     };
+
+    o.showTravelButton = function(show) {
+        _btnTravel.visible = show;
+    }
 
     return o;
 })();
