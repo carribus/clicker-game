@@ -29,7 +29,8 @@ module.exports = (function() {
         //this.game.physics.startSystem(Phaser.Physics[settings.physicsEngine]);
 
         this.game.player = localStorage.getItem('player');
-        if ( 1 ) { //!this.game.player ) {
+        //if ( 1 ) {
+        if ( !this.game.player ) {
             this.game.player = {
                 id: generateID(),
                 score: 0,

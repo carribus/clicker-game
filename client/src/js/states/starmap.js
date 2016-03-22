@@ -7,26 +7,49 @@ module.exports = (function() {
     var Settings = require('../../settings');
     var Polygon = require('../objects/polygon');
 
+    var NUM_COLS = 7, NUM_ROWS = 5;
+
     var _starmap;
     var _selectedHex;
+    var _pirate;
+    var _lastTick = Date.now();
 
     o.preload = function() {
 
     };
 
     o.create = function() {
+        // create the starmap
         this.createStarmap();
+        // create the pirate sprite
+        _pirate = this.game.add.sprite(0, 0, 'pirate');
+        _pirate.anchor.set(0.5, 0.5);
+        _pirate.scale.set(0.4);
+
+        var index = this.game.player.mapIndex || Math.floor(NUM_ROWS/2)*NUM_COLS + Math.floor(NUM_COLS/2);
+        var centerHex = _starmap.getChildAt(index);
+        this.highlightHex(centerHex, true);
+
+        this.game.player.mapIndex = index;
+
+        _pirate.x = _starmap.x + centerHex.center().x + 6;
+        _pirate.y = _starmap.y + centerHex.center().y + 2;
     };
 
     o.update = function() {
-
+        // save the player every second
+        if ( Date.now() - _lastTick > Settings.gameMechanics.delayBetweenPlayerSaveMS ) {
+            this.game.savePlayerObject();
+            _lastTick = Date.now();
+        }
     };
 
     o.createStarmap = function() {
         var _this = this;
-        var numColumns = 5, numRows = 5;
+        var numColumns = NUM_COLS, numRows = NUM_ROWS;
         var hex, x = 0, y = 0;
         var size = 120;
+        var gapX = size*0.77, gapY = size*0.90;
         var right = 0, bottom = 0;
 
         _starmap = this.game.add.sprite(0, 0);
@@ -34,8 +57,8 @@ module.exports = (function() {
         for ( var i = 0; i < numColumns*numRows; i++ ) {
             if ( i != 0 ) {
                 y = (i % numColumns) % 2 != 0 ? size*0.45 : 0;
-                y += (Math.floor(i/numColumns))*size*0.88;
-                x = (i%numColumns) * size*0.75;
+                y += (Math.floor(i/numColumns))*/*size*0.88*/gapY;
+                x = (i%numColumns) * gapX;
             }
             hex = new Polygon(this.game, x, y, size, 6);
             hex.index = i;
@@ -55,8 +78,9 @@ module.exports = (function() {
                     _this.highlightHex(_selectedHex, false);
                 }
                 _this.selectHex(target, true);
-                console.log(target.index + ' hex selected (w: ' + (target.x + target.width) + ')');
-                console.log(_selectedHex.index + ' hex unselected: ' + _selectedHex.index%numColumns + ', ' + Math.floor(_selectedHex.index/numRows));
+                _this.game.player.mapIndex = target.index;
+                //console.log(target.index + ' hex selected (w: ' + (target.x + target.width) + ')');
+                //console.log(_selectedHex.index + ' hex unselected: ' + _selectedHex.index%numColumns + ', ' + Math.floor(_selectedHex.index/numRows));
             });
             _starmap.addChild(hex);
 
