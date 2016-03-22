@@ -131,6 +131,8 @@ module.exports = (function() {
     };
 
     o.create = function() {
+        this.game.player.travel = null;
+
         if (this.game.player.mapIndex == undefined ) {
             this.game.player.mapIndex = Math.floor(NUM_ROWS/2)*NUM_COLS + Math.floor(NUM_COLS/2);
         }
@@ -174,12 +176,13 @@ module.exports = (function() {
         if ( _selectedHex ) {
             this.game.player.travel = {
                 fromHex: this.game.player.mapIndex,
-                toHex: _selectedHex.index
+                toHex: _selectedHex.index,
+                cellType: _selectedHex.cellType
             };
             this.game.savePlayerObject();
             this.game.state.start('travel');
         }
-    }
+    };
 
     o.update = function() {
         // save the player every second
@@ -259,7 +262,7 @@ module.exports = (function() {
                 hex.refresh();
             }
 
-            console.log(i + ' - ' + STARMAP_DEFINITION[i].cellType)
+            hex.cellType = STARMAP_DEFINITION[i].cellType;
             switch ( STARMAP_DEFINITION[i].cellType ) {
                 case    'asteroids':
                     // create the asteroid sprite

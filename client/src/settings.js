@@ -19,6 +19,6 @@ module.exports = {
         clickProgressIncrement: 0.001,
         clickProgressCritMultiplier: 2,
         distanceIdleIncrement: 2.5,
-        distanceClickIncrement: 500
+        distanceClickIncrement: 5000
     }
 };

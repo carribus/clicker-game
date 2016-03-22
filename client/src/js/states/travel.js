@@ -9,14 +9,16 @@ module.exports = (function() {
     var ProgressBar = require('../objects/progressbar');
     var Starfield = require('../objects/starfield');
 
+    var _travelDetail;
     var _clickEngine;
     var _clickArea;
     var _clickTextObjects = [];
     var _starfield;
     var _spaceShip;
+    var _thruster;
     var _distanceBar;
     var _lastTick = Date.now();
-    var _animationType = 'cruise';
+    var _animationType = 'fly';
 
     o.preload = function() {
     };
@@ -26,6 +28,9 @@ module.exports = (function() {
         _clickEngine.subscribe('reward', this.onReward.bind(this));
         _clickEngine.setReward(Settings.gameMechanics.distanceClickIncrement);
 
+        _travelDetail = this.game.player.travel;
+        console.log('Travelling to:');
+        console.log(_travelDetail);
         this.game.player.distanceToTravel = 100000;
         this.game.player.distanceTravelled = 0;
 
@@ -33,10 +38,18 @@ module.exports = (function() {
         this.game.world.add(_starfield);
         _starfield.update();
 
-        _spaceShip = this.game.add.sprite(100, Settings.display.height/2, 'spaceship', 0);
+        //_spaceShip = this.game.add.sprite(100, Settings.display.height/2, 'spaceship', 0);
+        _spaceShip = this.game.add.sprite(178, Settings.display.height/2, 'bugship', 0);
         _spaceShip.anchor.set(0.5, 0.5);
-        _spaceShip.animations.add('fly', [1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1], 20, true);
+        _spaceShip.scale.set(1.5);
+        _spaceShip.animations.add('fly', [0, 1, 2, 3, 2, 1, 0], 20, true);
+        //_spaceShip.animations.add('fly', [1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1], 20, true);
         _spaceShip.animations.add('cruise', [0, 1], 10, true);
+
+        _thruster = this.game.add.sprite(100, Settings.display.height/2, 'smallexplode', 0);
+        _thruster.anchor.set(0.5, 0.5);
+        _thruster.scale.set(1.5);
+        _thruster.animations.add('blowup', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
 
         _distanceBar = new ProgressBar(this.game, 10, 25, Settings.display.width-20, 10, '#C0C0FF', '#404080');
         this.game.world.add(_distanceBar);
@@ -58,6 +71,7 @@ module.exports = (function() {
         this.updateDistanceBar();
         this.processClickAnimations();
         _spaceShip.animations.play(_animationType);
+        _thruster.animations.play('blowup');
 
         // save the player every second
         if ( Date.now() - _lastTick > Settings.gameMechanics.delayBetweenPlayerSaveMS ) {
@@ -87,7 +101,14 @@ module.exports = (function() {
         this.updateDistanceBar();
 
         if ( this.game.player.distanceTravelled >= this.game.player.distanceToTravel ) {
-            this.state.start('mining');
+            switch ( this.game.player.travel.cellType ) {
+                case    'asteroids':
+                    this.state.start('mining');
+                    break;
+                case    'empty':
+                    this.state.start('starmap');
+                    break;
+            }
         }
     };
 
