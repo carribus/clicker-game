@@ -176,6 +176,7 @@ module.exports = (function() {
                 fromHex: this.game.player.mapIndex,
                 toHex: _selectedHex.index
             };
+            this.game.savePlayerObject();
             this.game.state.start('travel');
         }
     }
