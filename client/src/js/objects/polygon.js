@@ -4,11 +4,11 @@
 
 module.exports = Polygon;
 
-function Polygon(game, x, y, size, numberOfSides) {
+function Polygon(game, x, y, size, numberOfSides, fillColour, strokeColour, lineWidth) {
     this.backgroundColour = '#000000';
-    this.fillColour = '#202050';
-    this.strokeColour = '#A0A0FF'
-    this.lineWidth = 5;
+    this.fillColour = fillColour || '#202050';
+    this.strokeColour = strokeColour || '#A0A0FF';
+    this.lineWidth = lineWidth || 5;
     this.numberOfSides = numberOfSides || 6;
     this.bmp = game.add.bitmapData(size, size);
     this.polygon;

@@ -8,9 +8,11 @@ module.exports = (function() {
     var Polygon = require('../objects/polygon');
 
     var NUM_COLS = 7, NUM_ROWS = 5;
+    var HEX_SIZE = 120;
 
     var _starmap;
     var _selectedHex;
+    var _playerHex;
     var _pirate;
     var _lastTick = Date.now();
 
@@ -19,6 +21,10 @@ module.exports = (function() {
     };
 
     o.create = function() {
+        if (this.game.player.mapIndex == undefined ) {
+            this.game.player.mapIndex = Math.floor(NUM_ROWS/2)*NUM_COLS + Math.floor(NUM_COLS/2);
+        }
+
         // create the starmap
         this.createStarmap();
         // create the pirate sprite
@@ -26,14 +32,15 @@ module.exports = (function() {
         _pirate.anchor.set(0.5, 0.5);
         _pirate.scale.set(0.4);
 
-        var index = this.game.player.mapIndex || Math.floor(NUM_ROWS/2)*NUM_COLS + Math.floor(NUM_COLS/2);
-        var centerHex = _starmap.getChildAt(index);
-        this.highlightHex(centerHex, true);
+        var index = this.game.player.mapIndex;
+        _playerHex = _starmap.getChildAt(index);
+        this.refreshStarmap();
+        this.highlightHex(_playerHex, true);
 
         this.game.player.mapIndex = index;
 
-        _pirate.x = _starmap.x + centerHex.center().x + 6;
-        _pirate.y = _starmap.y + centerHex.center().y + 2;
+        _pirate.x = _starmap.x + _playerHex.center().x + 6;
+        _pirate.y = _starmap.y + _playerHex.center().y + 2;
     };
 
     o.update = function() {
@@ -48,37 +55,44 @@ module.exports = (function() {
         var _this = this;
         var numColumns = NUM_COLS, numRows = NUM_ROWS;
         var hex, x = 0, y = 0;
-        var size = 120;
+        var size = HEX_SIZE;
         var gapX = size*0.77, gapY = size*0.90;
         var right = 0, bottom = 0;
+        var fillColour, strokeColour;
 
         _starmap = this.game.add.sprite(0, 0);
 
         for ( var i = 0; i < numColumns*numRows; i++ ) {
+            fillColour = '#202020';
+            strokeColour = '#505050';
             if ( i != 0 ) {
                 y = (i % numColumns) % 2 != 0 ? size*0.45 : 0;
                 y += (Math.floor(i/numColumns))*/*size*0.88*/gapY;
                 x = (i%numColumns) * gapX;
             }
-            hex = new Polygon(this.game, x, y, size, 6);
+
+            hex = new Polygon(this.game, x, y, size, 6, fillColour, strokeColour);
             hex.index = i;
             hex.inputEnabled = true;
+
             hex.events.onInputOver.add(function(target, pointer) {
-                if ( target != _selectedHex ) {
+                if ( target != _playerHex && target != _selectedHex && _this.isHexAdjacent(target, _playerHex)) {
                     _this.highlightHex(target, true);
                 }
             });
             hex.events.onInputOut.add(function(target, pointer) {
-                if ( target != _selectedHex ) {
+                if ( target != _playerHex && target != _selectedHex && _this.isHexAdjacent(target, _playerHex)) {
                     _this.highlightHex(target, false);
                 }
             });
             hex.events.onInputDown.add(function(target, pointer) {
-                if ( _selectedHex && _selectedHex != target ) {
-                    _this.highlightHex(_selectedHex, false);
+                if ( _this.isHexAdjacent(target, _playerHex) ) {
+                    if ( _selectedHex && _selectedHex != target ) {
+                        _this.highlightHex(_selectedHex, false);
+                    }
+                    _this.selectHex(target, true);
+                    _this.game.player.mapIndex = target.index;
                 }
-                _this.selectHex(target, true);
-                _this.game.player.mapIndex = target.index;
                 //console.log(target.index + ' hex selected (w: ' + (target.x + target.width) + ')');
                 //console.log(_selectedHex.index + ' hex unselected: ' + _selectedHex.index%numColumns + ', ' + Math.floor(_selectedHex.index/numRows));
             });
@@ -90,6 +104,23 @@ module.exports = (function() {
 
         _starmap.x = Settings.display.width/2 - right/2;
         _starmap.y = Settings.display.height/2 - bottom/2;
+    };
+
+    o.refreshStarmap = function() {
+        var hex;
+        var fillColour, strokeColour;
+
+        for ( var i = 0, len = NUM_COLS*NUM_ROWS; i < len; i++ ) {
+            hex = _starmap.getChildAt(i);
+            if ( this.isHexAdjacent(hex, _playerHex) ) {
+                fillColour = '#202050';
+                strokeColour = '#A0A0FF';
+                hex.fillColour = fillColour;
+                hex.strokeColour = strokeColour;
+                hex.refresh();
+            }
+        }
+
     };
 
     o.highlightHex = function(hex, highlightOn) {
@@ -115,6 +146,16 @@ module.exports = (function() {
         }
 
         hex.refresh();
+    };
+
+    o.isHexAdjacent = function(src, target) {
+        sCenter = src.center();
+        tCenter = target.center();
+
+        if ( Math.abs(sCenter.x-tCenter.x) <= HEX_SIZE && Math.abs(sCenter.y - tCenter.y) <= HEX_SIZE ) {
+            return true;
+        }
+        return false;
     };
 
     return o;
