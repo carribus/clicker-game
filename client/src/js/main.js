@@ -26,6 +26,7 @@
     Game.state.add('travel', require('./states/travel'));
     Game.state.add('starmap', require('./states/starmap'));
     Game.state.add('mining', require('./states/mining'));
+    Game.state.add('starport', require('./states/starport'));
 
     Game.state.start('boot');
 })();

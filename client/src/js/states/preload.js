@@ -23,8 +23,8 @@ module.exports = (function() {
         var lastState = this.game.player.lastState || 'starmap';
         //lastState = 'starmap';
 
-        //if ( !this.game.player.starmap ) {
-        if ( 1 ) {
+        if ( !this.game.player.starmap ) {
+        //if ( 1 ) {
             var NUM_COLS = 7, NUM_ROWS = 5;
             this.game.player.starmap = StarmapGenerator.generate(NUM_COLS, NUM_ROWS);
         }

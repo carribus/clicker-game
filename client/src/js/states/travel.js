@@ -113,6 +113,11 @@ module.exports = (function() {
                 case    'asteroids':
                     this.state.start('mining');
                     break;
+
+                case    'starport':
+                    this.state.start('starport');
+                    break;
+
                 case    'empty':
                     this.state.start('starmap');
                     break;
