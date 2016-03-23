@@ -2,132 +2,143 @@
  * Created by petermares on 19/03/2016.
  */
 
-var STARMAP_DEFINITION = [
-    {
-        cellType: 'empty'
+var MOCK_STARMAP = {
+    summary: {
+        cols: 7,
+        rows: 5
     },
-    {
-        cellType: 'asteroids'
-    },
-    {
-        cellType: 'empty'
-    },
-    {
-        cellType: 'asteroids'
-    },
-    {
-        cellType: 'empty'
-    },
-    {
-        cellType: 'asteroids'
-    },
-    {
-        cellType: 'empty'
-    },
-    {
-        cellType: 'asteroids'
-    },
-    {
-        cellType: 'empty'
-    },
-    {
-        cellType: 'asteroids'
-    },
-    {
-        cellType: 'empty'
-    },
-    {
-        cellType: 'asteroids'
-    },
-    {
-        cellType: 'empty'
-    },
-    {
-        cellType: 'asteroids'
-    },
-    {
-        cellType: 'empty'
-    },
-    {
-        cellType: 'asteroids'
-    },
-    {
-        cellType: 'empty'
-    },
-    {
-        cellType: 'asteroids'
-    },
-    {
-        cellType: 'empty'
-    },
-    {
-        cellType: 'asteroids'
-    },
-    {
-        cellType: 'empty'
-    },
-    {
-        cellType: 'asteroids'
-    },
-    {
-        cellType: 'empty'
-    },
-    {
-        cellType: 'asteroids'
-    },
-    {
-        cellType: 'empty'
-    },
-    {
-        cellType: 'asteroids'
-    },
-    {
-        cellType: 'empty'
-    },
-    {
-        cellType: 'asteroids'
-    },
-    {
-        cellType: 'empty'
-    },
-    {
-        cellType: 'asteroids'
-    },
-    {
-        cellType: 'empty'
-    },
-    {
-        cellType: 'asteroids'
-    },
-    {
-        cellType: 'empty'
-    },
-    {
-        cellType: 'asteroids'
-    },
-    {
-        cellType: 'empty'
-    }
-];
+    map: [
+        {
+            cellType: 'empty'
+        },
+        {
+            cellType: 'asteroids'
+        },
+        {
+            cellType: 'empty'
+        },
+        {
+            cellType: 'asteroids'
+        },
+        {
+            cellType: 'empty'
+        },
+        {
+            cellType: 'asteroids'
+        },
+        {
+            cellType: 'empty'
+        },
+        {
+            cellType: 'asteroids'
+        },
+        {
+            cellType: 'empty'
+        },
+        {
+            cellType: 'asteroids'
+        },
+        {
+            cellType: 'empty'
+        },
+        {
+            cellType: 'asteroids'
+        },
+        {
+            cellType: 'empty'
+        },
+        {
+            cellType: 'asteroids'
+        },
+        {
+            cellType: 'empty'
+        },
+        {
+            cellType: 'asteroids'
+        },
+        {
+            cellType: 'empty'
+        },
+        {
+            cellType: 'asteroids'
+        },
+        {
+            cellType: 'empty'
+        },
+        {
+            cellType: 'asteroids'
+        },
+        {
+            cellType: 'empty'
+        },
+        {
+            cellType: 'asteroids'
+        },
+        {
+            cellType: 'empty'
+        },
+        {
+            cellType: 'asteroids'
+        },
+        {
+            cellType: 'empty'
+        },
+        {
+            cellType: 'asteroids'
+        },
+        {
+            cellType: 'empty'
+        },
+        {
+            cellType: 'asteroids'
+        },
+        {
+            cellType: 'empty'
+        },
+        {
+            cellType: 'asteroids'
+        },
+        {
+            cellType: 'empty'
+        },
+        {
+            cellType: 'asteroids'
+        },
+        {
+            cellType: 'empty'
+        },
+        {
+            cellType: 'asteroids'
+        },
+        {
+            cellType: 'empty'
+        }
+
+    ]
+};
 
 module.exports = (function() {
     var o = {};
     var Settings = require('../../settings');
     var Polygon = require('../objects/polygon');
 
+    var STARMAP_DEFINITION;
     var NUM_COLS = 7, NUM_ROWS = 5;
     var HEX_SIZE = 120;
 
     var _starmap;
     var _selectedHex;
     var _playerHex;
-    var _pirate, _asteroid
+    var _pirate, _asteroid, _station;
     var _btnTravel;
 
     var _lastTick = Date.now();
 
     o.preload = function() {
-
+        STARMAP_DEFINITION = this.game.player.starmap || MOCK_STARMAP;
+        NUM_COLS = STARMAP_DEFINITION.summary.cols;
+        NUM_ROWS = STARMAP_DEFINITION.summary.rows;
+        STARMAP_DEFINITION = STARMAP_DEFINITION.map;
     };
 
     o.create = function() {
@@ -162,6 +173,7 @@ module.exports = (function() {
 
         // refresh the starmap with the correct colouring per cell
         var index = this.game.player.mapIndex;
+
         _playerHex = _starmap.getChildAt(index);
         this.refreshStarmap();
         this.highlightHex(_playerHex, true);
@@ -275,6 +287,18 @@ module.exports = (function() {
                     _asteroid.y = _starmap.y + hex.center().y;
                     this.game.world.sendToBack(_asteroid);
                     break;
+
+                case 'starport':
+                    // create the space station sprite
+                    _station = this.game.add.sprite(0, 0, 'spacestation');
+                    _station.anchor.set(0.5, 0.5);
+                    _station.scale.set(0.15);
+                    _station.x = _starmap.x + hex.center().x;
+                    _station.y = _starmap.y + hex.center().y;
+                    this.game.world.sendToBack(_station);
+
+                    break;
+
                 case    'empty':
                 default:
                     break;

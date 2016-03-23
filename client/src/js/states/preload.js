@@ -4,6 +4,7 @@
 
 module.exports = (function() {
     var o = {};
+    var StarmapGenerator = require('../starmap/starmapgenerator');
 
     o.preload = function() {
         this.load.spritesheet('powerups', 'assets/images/powerups.png', 60, 63);
@@ -15,11 +16,18 @@ module.exports = (function() {
         this.load.spritesheet('smallexplode', 'assets/images/smallexplosion_sheet.png', 40, 39);
         this.load.spritesheet('explode', 'assets/images/explosion-sprite.png', 96, 96);
         this.load.image('starbutton', 'assets/images/starbutton.png');
+        this.load.image('spacestation', 'assets/images/spacestation.png');
     };
 
     o.create = function() {
         var lastState = this.game.player.lastState || 'starmap';
         //lastState = 'starmap';
+
+        //if ( !this.game.player.starmap ) {
+        if ( 1 ) {
+            var NUM_COLS = 7, NUM_ROWS = 5;
+            this.game.player.starmap = StarmapGenerator.generate(NUM_COLS, NUM_ROWS);
+        }
 
         // lets move along!
         this.state.start(lastState);

@@ -188,6 +188,8 @@ module.exports = (function () {
         // in the case of an autoclick, there is no target so we can randomly pick one
         if (!target && _asteroids.length > 0) {
             target = _asteroids[Math.floor(Math.random() * _asteroids.length)];
+            pt.x = target.x + target.width / 2;
+            pt.y = target.y + target.height /2;
         }
 
         // if we have a target, lets do some damage!
@@ -199,10 +201,6 @@ module.exports = (function () {
             });
             txt.anchor.set(0.5, 0.5);
             _clickTextObjects.push(txt);
-            txt.x = target.x + target.width / 2;
-            txt.y = target.y + target.height / 2;
-
-            //console.log(target.health);
 
             target.damage(value.value);
         } else {

@@ -3,7 +3,7 @@ An exploration of building a clicker/idle style game
 
 ## Todo
 
-- Write a hexagon display object
+- Graphics resource: http://millionthvector.blogspot.com/p/free-sprites.html
 - Travel Screen
     - Watch an Ad button
     - Hyperdrive button
@@ -14,7 +14,6 @@ An exploration of building a clicker/idle style game
     - Fix the 'powerups' layout
     - Decide if powerups still make sense or if there should be 'mining upgrades' that are purchased and installed at spaceports
 - Create the Attack screen
-- Create the spacemap screen
 
 
 ## Notes

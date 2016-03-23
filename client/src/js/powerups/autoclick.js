@@ -21,7 +21,7 @@ function AutoClickPowerup(config) {
 
         if ( now <= this.expiryTimestamp || !this.expiryTimestamp ) {
             if ( now - this.lastTime > 1000 / this.clicks_per_second ) {
-                clickEngine.click({pos: {x: 200, y: 200}}, false);
+                clickEngine.click({pos: {x: -1, y: -1}}, false);
                 this.lastTime = Date.now();
             }
         } else {
