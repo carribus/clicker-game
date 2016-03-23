@@ -29,10 +29,12 @@ module.exports = (function() {
         _clickEngine.setReward(Settings.gameMechanics.distanceClickIncrement);
 
         _travelDetail = this.game.player.travel;
+
         console.log('Travelling to:');
         console.log(_travelDetail);
-        this.game.player.distanceToTravel = 100000;
-        this.game.player.distanceTravelled = 0;
+
+        this.game.player.distanceToTravel = this.game.player.distanceToTravel || Settings.gameMechanics.distanceBetweenSectors;
+        this.game.player.distanceTravelled = this.game.player.distanceTravelled == undefined ? 0 : this.game.player.distanceTravelled;
 
         _starfield = new Starfield(this.game, 0, 0, Settings.display.width, Settings.display.height, 50);
         this.game.world.add(_starfield);

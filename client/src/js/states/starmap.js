@@ -179,6 +179,8 @@ module.exports = (function() {
                 toHex: _selectedHex.index,
                 cellType: _selectedHex.cellType
             };
+            this.game.player.distanceToTravel = Settings.gameMechanics.distanceBetweenSectors;
+            this.game.player.distanceTravelled = 0;
             this.game.savePlayerObject();
             this.game.state.start('travel');
         }
@@ -316,7 +318,7 @@ module.exports = (function() {
 
     o.showTravelButton = function(show) {
         _btnTravel.visible = show;
-    }
+    };
 
     return o;
 })();

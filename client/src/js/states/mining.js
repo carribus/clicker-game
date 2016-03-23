@@ -146,29 +146,40 @@ module.exports = (function() {
         var pt = value.metaData.pos;
         var target = value.metaData.target;
         var clickProgress = _progressBars.clickProgress;
-        var txt = this.game.add.text(pt.x, pt.y, value.value, {
-            font: value.isCritical ? 'bold 18pt Arial' : '16pt Arial',
-            align: 'center',
-            fill: value.isCritical ? "#FF8080" : "#FFFFFF"
-        });
-
-        txt.anchor.set(0.5, 0.5);
-        _clickTextObjects.push(txt);
+        var txt =
 
         clickProgress.progress += settings.gameMechanics.clickProgressIncrement * (value.isCritical ? settings.gameMechanics.clickProgressCritMultiplier : 1);
         clickProgress.refresh();
 
+        // in the case of an autoclick, there is no target so we can randomly pick one
         if ( !target && _asteroids.length > 0 ) {
             target = _asteroids[Math.floor(Math.random() * _asteroids.length)];
-            txt.x = target.x + target.width/2;
-            txt.y = target.y + target.height/2;
+            if ( target ) {
+                txt = this.game.add.text(pt.x, pt.y, value.value, {
+                    font: value.isCritical ? 'bold 18pt Arial' : '16pt Arial',
+                    align: 'center',
+                    fill: value.isCritical ? "#FF8080" : "#FFFFFF"
+                });
+                txt.anchor.set(0.5, 0.5);
+                _clickTextObjects.push(txt);
+                txt.x = target.x + target.width/2;
+                txt.y = target.y + target.height/2;
+            }
+        } else {
+            // no asteroids left so we should stop the auto-click powerup
+            for ( k in _activePowerups ) {
+                if ( k == 'autoclick' ) {
+                    _activePowerups[k].expired = true;
+                }
+            }
         }
+
         if ( target ) {
             console.log(target.health);
             target.damage(value.value);
         }
 
-        if ( !target.alive ) {
+        if ( target && !target.alive ) {
             for ( var i = 0; i < _asteroids.length; i++ ) {
                 if ( _asteroids[i] == target ) {
                     _asteroids.splice(i, 1);
@@ -176,7 +187,6 @@ module.exports = (function() {
 
                     var explosion = this.game.add.sprite(txt.x, txt.y, 'explode', 0);
                     explosion.anchor.set(0.5);
-                    console.log(target.scale);
                     explosion.scale.set(target.scale.x, target.scale.y);
                     explosion.animations.add('blowup', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], false);
                     explosion.play('blowup', 15, false, true);
