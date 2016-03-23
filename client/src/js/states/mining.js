@@ -65,9 +65,10 @@ module.exports = (function () {
             asteroid.scale.set(1 + Math.floor(Math.random() * 3));
             asteroid.x = 100 + Math.random() * (settings.display.width - 100 - asteroid.width);
             asteroid.y = 150 + Math.random() * (settings.display.height - 150 - asteroid.height * 2);
-            //asteroid.anchor.set(0.5, 0.5);
+            // generate the animation frame array
             var asteroidFrameArray = [];
             for (var j = 0; j < 31; j++) asteroidFrameArray.push(j);
+            // create the animation 'rotate'
             asteroid.animations.add('rotate', asteroidFrameArray, 10, true);
 
             asteroid.maxHealth = 1000 * asteroid.scale.x;
@@ -150,9 +151,8 @@ module.exports = (function () {
     o.removeTemporaryPowerups = function() {
         var powerups = this.game.player.purchasedPowerups;
 
-        for ( var i = 0, len = powerups.length; i < len; i++ ) {
-            console.log(powerups[i]);
-            switch ( powerups[i].classname ) {
+        for (var i = 0, len = powerups.length; i < len; i++) {
+            switch (powerups[i].classname) {
                 case    'autoclick':
                     powerups.splice(i--, 1);
                     len--;
@@ -164,7 +164,7 @@ module.exports = (function () {
         }
 
         this.game.savePlayerObject();
-    }
+    };
 
     o.onReward = function (value) {
         var pt = value.metaData.pos;
