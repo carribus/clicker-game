@@ -27,7 +27,6 @@ module.exports = (function() {
     };
 
     o.update = function() {
-
     };
 
     return o;

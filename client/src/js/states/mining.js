@@ -72,8 +72,9 @@ module.exports = (function () {
             // create the animation 'rotate'
             asteroid.animations.add('rotate', asteroidFrameArray, 10, true);
 
-            asteroid.maxHealth = 1000 * asteroid.scale.x;
-            asteroid.health = 100; //asteroid.maxHealth;
+            asteroid.maxHealth = settings.gameMechanics.asteroidBaseHealth * asteroid.scale.x;
+            //asteroid.health = 100;
+            asteroid.health = asteroid.maxHealth;
 
             asteroid.inputEnabled = true;
             asteroid.events.onInputDown.add(function (target, pointer) {
@@ -201,7 +202,7 @@ module.exports = (function () {
             txt.x = target.x + target.width / 2;
             txt.y = target.y + target.height / 2;
 
-            console.log(target.health);
+            //console.log(target.health);
 
             target.damage(value.value);
         } else {
