@@ -9,15 +9,16 @@ module.exports = (function() {
         this.load.spritesheet('powerups', 'assets/images/powerups.png', 60, 63);
         this.load.spritesheet('spaceship', 'assets/images/ship_sheet.png', 135, 69);
         this.load.spritesheet('asteroid', 'assets/images/asteroid_spritesheet.png', 128, 128);
-        this.load.spritesheet('pirate', 'assets/images/yuara_pirate.png');
+        this.load.image('pirate', 'assets/images/yuara_pirate.png');
         //this.load.spritesheet('spaceship', 'assets/images/ship_sheet.jpeg', 56, 99);
         this.load.spritesheet('spaceship2', 'assets/images/chainsaw_spaceship.gif');
         this.load.spritesheet('bugship', 'assets/images/bug_spaceship_sheet.png', 79, 39);
         this.load.spritesheet('smallexplode', 'assets/images/smallexplosion_sheet.png', 40, 39);
+        this.load.spritesheet('explode', 'assets/images/explosion-sprite.png', 96, 96);
     };
 
     o.create = function() {
-        var lastState = this.game.player.lastState || 'travel';
+        var lastState = this.game.player.lastState || 'starmap';
         lastState = 'starmap';
 
         // lets move along!

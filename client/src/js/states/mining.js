@@ -71,7 +71,7 @@ module.exports = (function() {
             asteroid.animations.add('rotate', asteroidFrameArray, 10, true);
 
             asteroid.maxHealth = 1000 * asteroid.scale.x;
-            asteroid.health = asteroid.maxHealth;
+            asteroid.health = 100; //asteroid.maxHealth;
 
             asteroid.inputEnabled = true;
             asteroid.events.onInputDown.add(function(target, pointer) {
@@ -156,7 +156,6 @@ module.exports = (function() {
         _clickTextObjects.push(txt);
 
         clickProgress.progress += settings.gameMechanics.clickProgressIncrement * (value.isCritical ? settings.gameMechanics.clickProgressCritMultiplier : 1);
-        console.log(clickProgress.progress);
         clickProgress.refresh();
 
         if ( !target && _asteroids.length > 0 ) {
@@ -174,6 +173,14 @@ module.exports = (function() {
                 if ( _asteroids[i] == target ) {
                     _asteroids.splice(i, 1);
                     console.log('removed asteroid - ' + _asteroids.length + ' asteroids remaining');
+
+                    var explosion = this.game.add.sprite(txt.x, txt.y, 'explode', 0);
+                    explosion.anchor.set(0.5);
+                    console.log(target.scale);
+                    explosion.scale.set(target.scale.x, target.scale.y);
+                    explosion.animations.add('blowup', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], false);
+                    explosion.play('blowup', 15, false, true);
+
                     break;
                 }
             }
