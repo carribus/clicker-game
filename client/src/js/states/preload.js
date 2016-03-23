@@ -19,7 +19,7 @@ module.exports = (function() {
 
     o.create = function() {
         var lastState = this.game.player.lastState || 'starmap';
-        lastState = 'mining';
+        //lastState = 'starmap';
 
         // lets move along!
         this.state.start(lastState);
