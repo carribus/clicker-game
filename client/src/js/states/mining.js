@@ -14,6 +14,7 @@ module.exports = (function () {
     var _clickSummary;
     var _clickTextObjects = [];
     var _asteroids = [];
+    var _btnStarmap;
 
     var _progressBars = {
         clickProgress: null,
@@ -92,7 +93,7 @@ module.exports = (function () {
                 powerupSprite.shopItem = powerup;
                 powerupSprite.width *= settings.display.dpi;
                 powerupSprite.height *= settings.display.dpi;
-                powerupSprite.x = (i % POWERUPS_PER_LINE) * powerupSprite.width * 2;
+                powerupSprite.x = (i % POWERUPS_PER_LINE) * powerupSprite.width;
                 powerupSprite.y = settings.display.height - (powerupSprite.height * (POWERUP_LINES - Math.floor(i / POWERUPS_PER_LINE)));
                 powerupSprite.inputEnabled = true;
                 powerupSprite.events.onInputUp.add(onPowerupClicked);
@@ -119,6 +120,14 @@ module.exports = (function () {
             }
         }
 
+        // create the starmap button
+        _btnStarmap = this.game.add.sprite(0, 0, 'starbutton');
+        _btnStarmap.scale.set(0.6);
+        _btnStarmap.x = settings.display.width - _btnStarmap.width - 10;
+        _btnStarmap.y = settings.display.height - _btnStarmap.height - 10;
+        _btnStarmap.inputEnabled = true;
+        _btnStarmap.events.onInputDown.add(this.gotoStarmap.bind(this));
+
         // apply already purchased powerups
         this.removeTemporaryPowerups();
         this.game.player.purchasedPowerups.forEach(function (powerup) {
@@ -127,7 +136,7 @@ module.exports = (function () {
     };
 
     o.update = function () {
-        _clickSummary.setText(this._generateClickText());
+        _clickSummary.setText(this.generateClickText());
 
         // process game powerup effects
         this._processGamePowerupEffects();
@@ -264,10 +273,14 @@ module.exports = (function () {
         this.game.savePlayerObject();
     };
 
-    o._generateClickText = function () {
+    o.generateClickText = function () {
         return 'Score: ' + _clickEngine.score() + ' | Clicks: ' + _clickEngine.clickCount() + ' | Crits: ' + _clickEngine.critCount() +
             ' | Crit%: ' + (_clickEngine.critChance() * 100).toFixed(2) + '% | Combo: x' + _clickEngine.comboRewardMultiplier() +
             ' | Asteroids: ' + _asteroids.length;
+    };
+
+    o.gotoStarmap = function(target) {
+        this.state.start('starmap');
     };
 
     function onPowerupClicked(target, pointer) {
