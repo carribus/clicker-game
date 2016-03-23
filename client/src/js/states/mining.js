@@ -120,6 +120,7 @@ module.exports = (function() {
 
         // apply already purchased powerups
         this.game.player.purchasedPowerups.forEach(function(powerup) {
+            // TODO: Remove any expiry-based powerups when entering the state
             _activePowerups[powerup.classname] = PowerupFactory.createPowerup(powerup.classname, powerup.metadata);
         });
     };
