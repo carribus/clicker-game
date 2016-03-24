@@ -8,6 +8,7 @@ module.exports = (function() {
     var Starfield = require('../objects/starfield');
 
     var _starport;
+    var _btnStarmap;
 
     var _lastTick = Date.now();
 
@@ -20,10 +21,19 @@ module.exports = (function() {
         _starfield.speed = 0.2;
         this.game.world.add(_starfield);
 
-        _starport = this.game.add.sprite(Settings.display.width/2, Settings.display.height/2, 'spacestation');
+        _starport = this.game.add.sprite(Settings.display.width/2, 400, 'spacestation');
         _starport.anchor.set(0.5);
         _starport.scale.set(1.5);
+        _starport.inputEnabled = true;
+        _starport.events.onInputDown.add(this.openStarportDialog.bind(this));
 
+        // create the starmap button
+        _btnStarmap = this.game.add.sprite(0, 0, 'starbutton');
+        _btnStarmap.scale.set(0.6);
+        _btnStarmap.x = Settings.display.width - _btnStarmap.width - 10;
+        _btnStarmap.y = Settings.display.height - _btnStarmap.height - 10;
+        _btnStarmap.inputEnabled = true;
+        _btnStarmap.events.onInputDown.add(this.gotoStarmap.bind(this));
     };
 
     o.update = function() {
@@ -35,6 +45,14 @@ module.exports = (function() {
             this.game.savePlayerObject();
             _lastTick = Date.now();
         }
+    };
+
+    o.openStarportDialog = function() {
+        console.log("Opening starport dialog");
+    };
+
+    o.gotoStarmap = function(target) {
+        this.state.start('starmap');
     };
 
     return o;

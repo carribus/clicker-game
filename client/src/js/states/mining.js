@@ -6,7 +6,7 @@ module.exports = (function () {
     var o = {};
     var ClickerEngine = require('../engine/clickerengine');
     var PowerupFactory = require('../powerups/powerupfactory');
-    var settings = require('../../settings');
+    var Settings = require('../../settings');
 
     var ProgressBar = require('../objects/progressbar');
 
@@ -47,12 +47,12 @@ module.exports = (function () {
             boundsAlignV: 'center',
             fill: 'white'
         });
-        _clickSummary.setTextBounds(5, 22, settings.display.width, 0);
+        _clickSummary.setTextBounds(5, 22, Settings.display.width, 0);
 
         // create the progress bars
-        _progressBars.clickProgress = new ProgressBar(this.game, 5, 5, settings.display.width - 10, 10, '#8080FF', '#606060');
+        _progressBars.clickProgress = new ProgressBar(this.game, 5, 5, Settings.display.width - 10, 10, '#8080FF', '#606060');
         this.game.world.add(_progressBars.clickProgress);
-        _progressBars.bonusProgress = new ProgressBar(this.game, 5, 55, settings.display.width - 10, 10, '#FF8080', '#606060');
+        _progressBars.bonusProgress = new ProgressBar(this.game, 5, 55, Settings.display.width - 10, 10, '#FF8080', '#606060');
         this.game.world.add(_progressBars.bonusProgress);
         _progressBars.clickProgress.progress = this.game.player.clickProgress || 0;
         _progressBars.clickProgress.refresh();
@@ -62,17 +62,17 @@ module.exports = (function () {
         // create the asteroid(s)
         var numAsteroids = 3 + Math.floor(Math.random() * 10);
         for (var i = 0; i < numAsteroids; i++) {
-            var asteroid = this.game.add.sprite(settings.display.width / 2, settings.display.height / 2, 'asteroid', 0);
+            var asteroid = this.game.add.sprite(Settings.display.width / 2, Settings.display.height / 2, 'asteroid', 0);
             asteroid.scale.set(1 + Math.floor(Math.random() * 3));
-            asteroid.x = 100 + Math.random() * (settings.display.width - 100 - asteroid.width);
-            asteroid.y = 150 + Math.random() * (settings.display.height - 150 - asteroid.height * 2);
+            asteroid.x = 100 + Math.random() * (Settings.display.width - 100 - asteroid.width);
+            asteroid.y = 150 + Math.random() * (Settings.display.height - 150 - asteroid.height * 2);
             // generate the animation frame array
             var asteroidFrameArray = [];
             for (var j = 0; j < 31; j++) asteroidFrameArray.push(j);
             // create the animation 'rotate'
             asteroid.animations.add('rotate', asteroidFrameArray, 10, true);
 
-            asteroid.maxHealth = settings.gameMechanics.asteroidBaseHealth * asteroid.scale.x;
+            asteroid.maxHealth = Settings.gameMechanics.asteroidBaseHealth * asteroid.scale.x;
             //asteroid.health = 100;
             asteroid.health = asteroid.maxHealth;
 
@@ -92,10 +92,10 @@ module.exports = (function () {
             if (!playerHasPurchasedPowerup(this.game.player, powerup) || !powerup.metadata.buyOnce) {
                 powerupSprite = this.game.add.sprite(0, 0, 'powerups', powerup.imageIndex);
                 powerupSprite.shopItem = powerup;
-                powerupSprite.width *= settings.display.dpi;
-                powerupSprite.height *= settings.display.dpi;
+                powerupSprite.width *= Settings.display.dpi;
+                powerupSprite.height *= Settings.display.dpi;
                 powerupSprite.x = (i % POWERUPS_PER_LINE) * powerupSprite.width;
-                powerupSprite.y = settings.display.height - (powerupSprite.height * (POWERUP_LINES - Math.floor(i / POWERUPS_PER_LINE)));
+                powerupSprite.y = Settings.display.height - (powerupSprite.height * (POWERUP_LINES - Math.floor(i / POWERUPS_PER_LINE)));
                 powerupSprite.inputEnabled = true;
                 powerupSprite.events.onInputUp.add(onPowerupClicked);
 
@@ -124,8 +124,8 @@ module.exports = (function () {
         // create the starmap button
         _btnStarmap = this.game.add.sprite(0, 0, 'starbutton');
         _btnStarmap.scale.set(0.6);
-        _btnStarmap.x = settings.display.width - _btnStarmap.width - 10;
-        _btnStarmap.y = settings.display.height - _btnStarmap.height - 10;
+        _btnStarmap.x = Settings.display.width - _btnStarmap.width - 10;
+        _btnStarmap.y = Settings.display.height - _btnStarmap.height - 10;
         _btnStarmap.inputEnabled = true;
         _btnStarmap.events.onInputDown.add(this.gotoStarmap.bind(this));
 
@@ -148,7 +148,7 @@ module.exports = (function () {
         });
 
         // save the player every second
-        if (Date.now() - _lastTick > settings.gameMechanics.delayBetweenPlayerSaveMS) {
+        if (Date.now() - _lastTick > Settings.gameMechanics.delayBetweenPlayerSaveMS) {
             this._savePlayerObject();
             _lastTick = Date.now();
         }
@@ -182,7 +182,7 @@ module.exports = (function () {
         var clickProgress = _progressBars.clickProgress;
         var txt;
 
-        clickProgress.progress += settings.gameMechanics.clickProgressIncrement * (value.isCritical ? settings.gameMechanics.clickProgressCritMultiplier : 1);
+        clickProgress.progress += Settings.gameMechanics.clickProgressIncrement * (value.isCritical ? Settings.gameMechanics.clickProgressCritMultiplier : 1);
         clickProgress.refresh();
 
         // in the case of an autoclick, there is no target so we can randomly pick one

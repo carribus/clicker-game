@@ -8,7 +8,6 @@ module.exports = (function() {
 
     o.preload = function() {
         this.load.spritesheet('powerups', 'assets/images/powerups.png', 60, 63);
-        //this.load.spritesheet('spaceship', 'assets/images/ship_sheet.png', 135, 69);
         //this.load.spritesheet('spaceship2', 'assets/images/chainsaw_spaceship.gif');
         this.load.spritesheet('bugship', 'assets/images/bug_spaceship_sheet.png', 79, 39);
         this.load.spritesheet('asteroid', 'assets/images/asteroid_spritesheet.png', 128, 128);
@@ -27,6 +26,14 @@ module.exports = (function() {
         //if ( 1 ) {
             var NUM_COLS = 7, NUM_ROWS = 5;
             this.game.player.starmap = StarmapGenerator.generate(NUM_COLS, NUM_ROWS);
+
+            // since we generated a new starmap, we need to position the player on an empty cell
+            for ( var i = 0, len = NUM_COLS*NUM_ROWS; i < len; i++ ) {
+                if ( this.game.player.starmap.map[i].cellType == 'empty' ) {
+                    this.game.player.mapIndex = i;
+                    break;
+                }
+            }
         }
 
         // lets move along!
