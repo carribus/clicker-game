@@ -8,6 +8,7 @@ function Starfield(game, x, y, width, height, numStars) {
     this.stars = this._generateStars(numStars, width, height);
     this.bmp = game.add.bitmapData(width, height);
     this.lastTick = Date.now();
+    this.speed = 1;
 
     Phaser.Sprite.call(this, game, x, y, this.bmp);
     this.update();
@@ -20,16 +21,18 @@ Starfield.prototype.update = function() {
     var colour;
 
     if ( Date.now() - this.lastTick > 20 ) {
-        this.bmp.clear();
 
         this.bmp.ctx.fillStyle = '#000000';
-        this.bmp.ctx.fillRect(0, 0, this.width, this.height);
 
         for (var i = 0, len = this.stars.length; i < len; i++) {
             star = this.stars[i];
 
+            // clear out the old star
+            this.bmp.ctx.fillStyle = '#000000';
+            this.bmp.ctx.fillRect(star.x-1, star.y-1, 4, 4);
+
             // update the stars position
-            star.x -= (5 - star.z)*2;
+            star.x -= (5 - star.z) * this.speed;
             if (star.x < 0) {
                 star.x = this.width;
             }

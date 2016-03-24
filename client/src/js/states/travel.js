@@ -40,8 +40,8 @@ module.exports = (function() {
         this.game.player.distanceTravelled = this.game.player.distanceTravelled == undefined ? 0 : this.game.player.distanceTravelled;
 
         _starfield = new Starfield(this.game, 0, 0, Settings.display.width, Settings.display.height, 50);
+        _starfield.speed = 2;
         this.game.world.add(_starfield);
-        _starfield.update();
 
         var ssXpos = SPACESHIP_START_X + (SPACESHIP_END_X - SPACESHIP_START_X)*(this.game.player.distanceTravelled / this.game.player.distanceToTravel);
         _spaceShip = this.game.add.sprite(ssXpos, SPACESHIP_START_Y, 'bugship', 0);

@@ -21,7 +21,7 @@ module.exports = (function() {
 
     o.create = function() {
         var lastState = this.game.player.lastState || 'starmap';
-        //lastState = 'starmap';
+        //lastState = 'travel';
 
         if ( !this.game.player.starmap ) {
         //if ( 1 ) {
