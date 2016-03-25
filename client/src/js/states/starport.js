@@ -6,6 +6,7 @@ module.exports = (function() {
     var o = {};
     var Settings = require('../../settings');
     var Starfield = require('../objects/starfield');
+    var Dialog = require('../objects/dialog')
 
     var _starport;
     var _btnStarmap;
@@ -25,6 +26,7 @@ module.exports = (function() {
         _starport.anchor.set(0.5);
         _starport.scale.set(1.5);
         _starport.inputEnabled = true;
+        _starport.input.useHandCursor = true;
         _starport.events.onInputDown.add(this.openStarportDialog.bind(this));
 
         // create the starmap button
@@ -33,7 +35,15 @@ module.exports = (function() {
         _btnStarmap.x = Settings.display.width - _btnStarmap.width - 10;
         _btnStarmap.y = Settings.display.height - _btnStarmap.height - 10;
         _btnStarmap.inputEnabled = true;
+        _btnStarmap.input.useHandCursor = true;
         _btnStarmap.events.onInputDown.add(this.gotoStarmap.bind(this));
+
+        var dlg = new Dialog(this.game, 100, 100, Settings.display.width-200, Settings.display.height-300, 'black', '#60FF60');
+        dlg.alpha = 0.8;
+        dlg.inputEnabled = true;
+        dlg.input.enableDrag();
+        this.game.world.add(dlg);
+
     };
 
     o.update = function() {
