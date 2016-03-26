@@ -16,6 +16,7 @@ module.exports = (function() {
         this.load.spritesheet('explode', 'assets/images/explosion-sprite.png', 96, 96);
         this.load.image('starbutton', 'assets/images/starbutton.png');
         this.load.image('spacestation', 'assets/images/spacestation.png');
+        this.load.image('button_close', 'assets/images/close_button.png');
     };
 
     o.create = function() {

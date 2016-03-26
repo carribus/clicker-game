@@ -21,7 +21,7 @@ module.exports = (function() {
         var _starfield = new Starfield(this.game, 0, 0, Settings.display.width, Settings.display.height, 50);
         _starfield.speed = 0.2;
         this.game.world.add(_starfield);
-
+0
         _starport = this.game.add.sprite(Settings.display.width/2, 400, 'spacestation');
         _starport.anchor.set(0.5);
         _starport.scale.set(1.5);
@@ -39,6 +39,7 @@ module.exports = (function() {
         _btnStarmap.events.onInputDown.add(this.gotoStarmap.bind(this));
 
         var dlg = new Dialog(this.game, 100, 100, Settings.display.width-200, Settings.display.height-300, 'black', '#60FF60');
+        dlg.setTitle("Starport Options");
         dlg.alpha = 0.8;
         dlg.inputEnabled = true;
         dlg.input.enableDrag();
