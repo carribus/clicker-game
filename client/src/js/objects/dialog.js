@@ -9,21 +9,30 @@ function Dialog(game, x, y, width, height, backgroundColour, borderColour) {
     this.borderColour = borderColour;
     this.bmp = game.add.bitmapData(width, height);
     this.titleHeight = 80;
-    this.closeButton = game.add.button(0, 10, 'button_close', this.onCloseButtonPressed, this);
+    this.panels = {};
+
+    Phaser.Sprite.call(this, game, x, y, this.bmp);
+
+    this.inputEnabled = true;
+    this.anchor.set(0.5);
+
+    this.closeButton = game.add.button(width/2, -height/2, 'button_close', this.closeButtonHandler, this);
+    this.closeButton.alpha = 1;
+    this.closeButton.anchor.set(0.5);
     this.closeButton.scale.set(1.2);
-    this.txtTitle = game.add.text(20, 2, 'Untitled Dialog', {
+    this.closeButton.input.priorityID = 1;
+    this.addChild(this.closeButton);
+    this.onCloseButtonPressed = new Phaser.Signal();
+
+    this.txtTitle = game.add.text(0, -height/2+this.titleHeight/3, 'Untitled Dialog', {
         font: '28pt Arial',
         boundsAlignH: 'left',
         boundsAlignV: 'middle',
         fill: 'white'
     });
+    this.txtTitle.anchor.set(0.5);
     this.txtTitle.setTextBounds(0, 0, width, this.titleHeight);
-
-    Phaser.Sprite.call(this, game, x, y, this.bmp);
     this.addChild(this.txtTitle);
-    this.addChild(this.closeButton);
-    this.closeButton.input.priorityID = 1;
-    this.closeButton.x = width - 10 - this.closeButton.width;
 
     this.refresh();
 }
@@ -60,6 +69,21 @@ Dialog.prototype.setTitle = function(title) {
     this.refresh();
 };
 
-Dialog.prototype.onCloseButtonPressed = function(target) {
+Dialog.prototype.closeButtonHandler = function(target) {
     console.log('Dialog: Close Button Pressed');
+    this.onCloseButtonPressed.dispatch();
+};
+
+Dialog.prototype.addPanel = function(id, isVisible) {
+    if ( this.panels[id] ) {
+        this.removeChild(this.panels[id]);
+        this.panels[id].kill();
+    }
+
+    this.panels[id] = this.game.add.image(0, 0);
+    this.panels[id].visible = isVisible;
+    this.panels[id].anchor.set(0.5);
+    this.addChild(this.panels[id]);
+
+    return this.panels[id];
 };

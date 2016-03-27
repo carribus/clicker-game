@@ -6,10 +6,12 @@ module.exports = (function() {
     var o = {};
     var Settings = require('../../settings');
     var Starfield = require('../objects/starfield');
-    var Dialog = require('../objects/dialog')
+    var Dialog = require('../objects/dialog');
+    var DlgStarPort = require('../dialogs/dlgstarport');
 
     var _starport;
     var _btnStarmap;
+    var _dlgStarport;
 
     var _lastTick = Date.now();
 
@@ -21,8 +23,8 @@ module.exports = (function() {
         var _starfield = new Starfield(this.game, 0, 0, Settings.display.width, Settings.display.height, 50);
         _starfield.speed = 0.2;
         this.game.world.add(_starfield);
-0
-        _starport = this.game.add.sprite(Settings.display.width/2, 400, 'spacestation');
+
+        _starport = this.game.add.image(Settings.display.width/2, 400, 'spacestation');
         _starport.anchor.set(0.5);
         _starport.scale.set(1.5);
         _starport.inputEnabled = true;
@@ -30,7 +32,7 @@ module.exports = (function() {
         _starport.events.onInputDown.add(this.openStarportDialog.bind(this));
 
         // create the starmap button
-        _btnStarmap = this.game.add.sprite(0, 0, 'starbutton');
+        _btnStarmap = this.game.add.image(0, 0, 'starbutton');
         _btnStarmap.scale.set(0.6);
         _btnStarmap.x = Settings.display.width - _btnStarmap.width - 10;
         _btnStarmap.y = Settings.display.height - _btnStarmap.height - 10;
@@ -38,13 +40,17 @@ module.exports = (function() {
         _btnStarmap.input.useHandCursor = true;
         _btnStarmap.events.onInputDown.add(this.gotoStarmap.bind(this));
 
-        var dlg = new Dialog(this.game, 100, 100, Settings.display.width-200, Settings.display.height-300, 'black', '#60FF60');
-        dlg.setTitle("Starport Options");
-        dlg.alpha = 0.8;
-        dlg.inputEnabled = true;
-        dlg.input.enableDrag();
-        this.game.world.add(dlg);
-
+        _dlgStarport = new DlgStarPort(this.game, Settings.display.width/2, Settings.display.height/2-100, Settings.display.width-200, Settings.display.height-300);
+        this.game.world.add(_dlgStarport);
+        _dlgStarport.visible = false;
+        _dlgStarport.onCloseButtonPressed.add(function() {
+            if ( _dlgStarport.visible ) {
+                var tween = _dlgStarport.game.add.tween(_dlgStarport.scale).to({x: 0.1, y: 0.1}, 150, Phaser.Easing.Linear.In, true);
+                tween.onComplete.add(function() {
+                    _dlgStarport.visible = false;
+                });
+            }
+        });
     };
 
     o.update = function() {
@@ -60,6 +66,11 @@ module.exports = (function() {
 
     o.openStarportDialog = function() {
         console.log("Opening starport dialog");
+        if ( _dlgStarport.visible === false ) {
+            _dlgStarport.scale.set(0.1);
+            _dlgStarport.visible = true;
+            tween = this.game.add.tween(_dlgStarport.scale).to({x: 1, y:1}, 750, Phaser.Easing.Bounce.Out, true);
+        }
     };
 
     o.gotoStarmap = function(target) {

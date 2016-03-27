@@ -10,11 +10,11 @@ function Starfield(game, x, y, width, height, numStars) {
     this.lastTick = Date.now();
     this.speed = 1;
 
-    Phaser.Sprite.call(this, game, x, y, this.bmp);
+    Phaser.Image.call(this, game, x, y, this.bmp);
     this.update();
 }
 
-Starfield.prototype = Object.create(Phaser.Sprite.prototype);
+Starfield.prototype = Object.create(Phaser.Image.prototype);
 Starfield.prototype.constructor = Starfield;
 
 Starfield.prototype.update = function() {
