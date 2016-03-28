@@ -40,7 +40,7 @@ module.exports = (function() {
         _btnStarmap.input.useHandCursor = true;
         _btnStarmap.events.onInputDown.add(this.gotoStarmap.bind(this));
 
-        _dlgStarport = new DlgStarPort(this.game, Settings.display.width/2, Settings.display.height/2-100, Settings.display.width-200, Settings.display.height-300);
+        _dlgStarport = new DlgStarPort(this.game, Settings.display.width/2, Settings.display.height/2-100, Settings.display.width*0.8, Settings.display.height*0.7);
         this.game.world.add(_dlgStarport);
         _dlgStarport.visible = false;
         _dlgStarport.onCloseButtonPressed.add(function() {
@@ -67,6 +67,8 @@ module.exports = (function() {
     o.openStarportDialog = function() {
         console.log("Opening starport dialog");
         if ( _dlgStarport.visible === false ) {
+            _dlgStarport.showPanel('main', true);
+            _dlgStarport.setTitle('Starport Options');
             _dlgStarport.scale.set(0.1);
             _dlgStarport.visible = true;
             tween = this.game.add.tween(_dlgStarport.scale).to({x: 1, y:1}, 750, Phaser.Easing.Bounce.Out, true);

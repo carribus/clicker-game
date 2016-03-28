@@ -66,11 +66,14 @@ Dialog.prototype.refresh = function() {
 
 Dialog.prototype.setTitle = function(title) {
     this.txtTitle.text = title;
-    this.refresh();
+    //this.refresh();
 };
 
 Dialog.prototype.closeButtonHandler = function(target) {
     console.log('Dialog: Close Button Pressed');
+    for ( k in this.panels ) {
+        this.panels[k].visible = false;
+    }
     this.onCloseButtonPressed.dispatch();
 };
 
@@ -86,4 +89,10 @@ Dialog.prototype.addPanel = function(id, isVisible) {
     this.addChild(this.panels[id]);
 
     return this.panels[id];
+};
+
+Dialog.prototype.showPanel = function(id, showFlag) {
+    if ( this.panels[id] ) {
+        this.panels[id].visible = showFlag;
+    }
 };

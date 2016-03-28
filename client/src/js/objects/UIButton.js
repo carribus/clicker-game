@@ -18,6 +18,7 @@ function UIButton(game, x, y, width, height, label, callback, callbackContext) {
     this.events.onInputOver.add(this.onInputOverHandler, this);
     this.events.onInputOut.add(this.onInputOutHandler, this);
     this.events.onInputDown.add(this.onInputDownHandler, this);
+    this.events.onInputUp.add(this.onInputUpHandler, this);
 
     var fontSize = height * 0.3;
     this.label = game.add.text(0, 4, label, {
@@ -69,7 +70,12 @@ UIButton.prototype.onInputOutHandler = function(target, pointer) {
 };
 
 UIButton.prototype.onInputDownHandler = function(target, pointer) {
+    this.onInputOverHandler();
     if ( this.callback ) {
         this.callback.call(this.callbackContext, target, pointer);
     }
 };
+
+UIButton.prototype.onInputUpHandler = function(target, pointer) {
+    this.refresh();
+}
