@@ -93,6 +93,13 @@ DlgStarPort.prototype.onShipButtonPressed = function() {
     console.log('Ship button pressed');
 };
 
+DlgStarPort.prototype.onBackButtonPressed = function() {
+    for ( k in this.panels ) {
+        this.panels[k].visible = false;
+    }
+    this.panels.main.visible = true;
+};
+
 DlgStarPort.prototype._createMainPanel = function(game, x, y, width, height) {
     var mainPanel = this.addPanel('main', true);
     var button = new UIButton(game, 0, -150, width*0.5, 100, 'TRADE', this.onTradeButtonPressed, this);
@@ -114,11 +121,6 @@ DlgStarPort.prototype._createTradePanel = function(game, x, y, width, height) {
     var padding = (this.width % itemWidth) / 4;
     var x = 0, y = 0;
 
-    console.log('padding = ' + padding);
-
-    console.log('this.x = ' + this.x);
-    console.log('this.right = ' + (this.x + this.width));
-    console.log('this.y = ' + this.y);
     for ( var i = 0, len = TRADE_ITEMS.length; i < len; i++ ) {
         var item = new TradeItemWidget(game, 0, 0, itemWidth, itemHeight, TRADE_ITEMS[i]);
         item.x = -this.width/2 + item.width/2 + padding + ((i%3)*(itemWidth+padding));
@@ -128,6 +130,10 @@ DlgStarPort.prototype._createTradePanel = function(game, x, y, width, height) {
 
         x += item.width;
     }
+
+    var backButton = new UIButton(game, 0, this.height/2-110, this.width*0.8, 100, 'Back', this.onBackButtonPressed, this);
+    backButton.anchor.set(0.5);
+    tradePanel.addChild(backButton);
 };
 
 function TradeItemWidget(game, x, y, width, height, item) {
