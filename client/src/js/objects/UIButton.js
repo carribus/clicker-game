@@ -48,7 +48,7 @@ UIButton.prototype.refresh = function() {
     ctx.lineTo(0, 10);
     ctx.closePath();
 
-    ctx.lineWidth = 2;
+    ctx.lineWidth = 3;
     ctx.strokeStyle = this.strokeColour;
     ctx.fillStyle = this.fillColour;
     ctx.fill();

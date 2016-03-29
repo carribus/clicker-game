@@ -118,17 +118,15 @@ DlgStarPort.prototype._createMainPanel = function(game, x, y, width, height) {
 DlgStarPort.prototype._createTradePanel = function(game, x, y, width, height) {
     var tradePanel = this.addPanel('trade', false);
     var itemWidth = 200, itemHeight = 200;
-    var padding = (this.width % itemWidth) / 4;
-    var x = 0, y = 0;
+    var padding = this.width % itemWidth / 3;
+    var numItemsPerRow = 3;
 
     for ( var i = 0, len = TRADE_ITEMS.length; i < len; i++ ) {
         var item = new TradeItemWidget(game, 0, 0, itemWidth, itemHeight, TRADE_ITEMS[i]);
-        item.x = -this.width/2 + item.width/2 + padding + ((i%3)*(itemWidth+padding));
-        item.y = -this.height/2 + item.height/2 + padding + this.titleHeight + (Math.floor(i/3)*(itemHeight+padding));
+        item.x = -this.width/2 + item.width/2 + padding + ((i%numItemsPerRow)*(itemWidth+padding));
+        item.y = -this.height/2 + item.height/2 + padding + this.titleHeight + (Math.floor(i/numItemsPerRow)*(itemHeight+padding));
         game.world.add(item);
         tradePanel.addChild(item);
-
-        x += item.width;
     }
 
     var backButton = new UIButton(game, 0, this.height/2-110, this.width*0.8, 100, 'Back', this.onBackButtonPressed, this);
