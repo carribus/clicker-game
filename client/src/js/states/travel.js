@@ -5,7 +5,7 @@
 module.exports = (function() {
     var o = {};
     var Settings = require('../../settings');
-    var ClickerEngine = require('../engine/clickerengine');
+    var ClickerEngine = require('../models/clickerengine');
     var ProgressBar = require('../objects/progressbar');
     var Starfield = require('../objects/starfield');
 

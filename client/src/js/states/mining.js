@@ -4,7 +4,7 @@
 
 module.exports = (function () {
     var o = {};
-    var ClickerEngine = require('../engine/clickerengine');
+    var ClickerEngine = require('../models/clickerengine');
     var PowerupFactory = require('../powerups/powerupfactory');
     var Settings = require('../../settings');
 

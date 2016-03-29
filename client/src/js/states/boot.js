@@ -4,9 +4,10 @@
 
 module.exports = (function() {
     var settings = require('../../settings');
-    var ClickerEngine = require('../engine/clickerengine');
-    var ShopEngine = require('../engine/shopengine');
+    var ClickerEngine = require('../models/clickerengine');
+    var ShopEngine = require('../models/shopengine');
     var PowerupList = require('../powerups/poweruplist');
+    var Player = require('../models/player');
     var o = {};
 
     o.preload = function() {
@@ -31,19 +32,13 @@ module.exports = (function() {
         this.game.player = localStorage.getItem('player');
         //if ( 1 ) {
         if ( !this.game.player ) {
-            this.game.player = {
-                id: generateID(),
-                score: 0,
-                clicks: 0,
-                crits: 0,
-                purchasedPowerups: []
-            };
+            this.game.player = new Player(generateID());
             localStorage.setItem('player', JSON.stringify(this.game.player));
         } else {
             this.game.player = JSON.parse(this.game.player);
         }
 
-        console.log('Player: ' + JSON.stringify(this.game.player));
+        //console.log('Player: ' + JSON.stringify(this.game.player));
 
         this.game.scale.pageAlignHorizontally = true;
         this.game.scale.pageAlignVertically = true;
