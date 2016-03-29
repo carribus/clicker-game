@@ -71,6 +71,7 @@ module.exports = (function () {
             for (var j = 0; j < 31; j++) asteroidFrameArray.push(j);
             // create the animation 'rotate'
             asteroid.animations.add('rotate', asteroidFrameArray, 10, true);
+            asteroid.animations.play('rotate');
 
             asteroid.maxHealth = Settings.gameMechanics.asteroidBaseHealth * asteroid.scale.x;
             asteroid.health = asteroid.maxHealth;
@@ -141,10 +142,6 @@ module.exports = (function () {
         // process game powerup effects
         this._processGamePowerupEffects();
         this._processClickAnimations();
-
-        _asteroids.forEach(function (a) {
-            a.animations.play('rotate');
-        });
 
         // save the player every second
         if (Date.now() - _lastTick > Settings.gameMechanics.delayBetweenPlayerSaveMS) {
@@ -242,6 +239,7 @@ module.exports = (function () {
             if (_activePowerups[powerupKeys[i]].expired) {
                 console.log('Removing powerup: ' + powerupKeys[i]);
                 delete _activePowerups[powerupKeys[i]];
+
             }
         }
     };
@@ -289,6 +287,8 @@ module.exports = (function () {
             target.game.player.purchasedPowerups.push(shopItem);
             if (shopItem.metadata.buyOnce) {
                 target.kill();
+            } else {
+                target.visible = false;
             }
         }
     }
