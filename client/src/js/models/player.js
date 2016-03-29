@@ -17,4 +17,16 @@ function Player(id) {
     this.lastState = null;
     this.distanceToTravel = null;
     this.distanceToTravel = null;
+    this.inventorySize = 1;
+    this.inventory = [];
 }
+
+Player.prototype.hasInventorySpace = function() {
+    return this.inventory.length < this.inventorySize;
+};
+
+Player.prototype.addToInventory = function(item) {
+    if ( this.hasInventorySpace() ) {
+        this.inventory.push(item);
+    }
+};

@@ -32,6 +32,8 @@ module.exports = (function () {
     };
 
     o.create = function () {
+        var i;
+
         _clickEngine = new ClickerEngine();
         _clickEngine.setScore(this.game.player.score || 0);
         _clickEngine.setClickCount(this.game.player.clicks || 0);
@@ -59,7 +61,7 @@ module.exports = (function () {
 
         // create the asteroid(s)
         var numAsteroids = 3 + Math.floor(Math.random() * 10);
-        for (var i = 0; i < numAsteroids; i++) {
+        for (i = 0; i < numAsteroids; i++) {
             var asteroid = this.game.add.sprite(Settings.display.width / 2, Settings.display.height / 2, 'asteroid', 0);
             asteroid.scale.set(1 + Math.floor(Math.random() * 3));
             asteroid.x = 100 + Math.random() * (Settings.display.width - 100 - asteroid.width);
@@ -83,7 +85,7 @@ module.exports = (function () {
         // create the powerup shop item sprites (buttons)
         var powerupSprite;
         var powerupArray = this.game.shop.items('powerups');
-        for (var i = 0, len = powerupArray.length; i < len; i++) {
+        for (i = 0, len = powerupArray.length; i < len; i++) {
             var powerup = powerupArray[i];
 
             if (!playerHasPurchasedPowerup(this.game.player, powerup) || !powerup.metadata.buyOnce) {
