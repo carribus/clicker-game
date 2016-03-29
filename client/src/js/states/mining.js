@@ -32,8 +32,6 @@ module.exports = (function () {
     };
 
     o.create = function () {
-        _score = 0;
-
         _clickEngine = new ClickerEngine();
         _clickEngine.setScore(this.game.player.score || 0);
         _clickEngine.setClickCount(this.game.player.clicks || 0);
@@ -73,7 +71,6 @@ module.exports = (function () {
             asteroid.animations.add('rotate', asteroidFrameArray, 10, true);
 
             asteroid.maxHealth = Settings.gameMechanics.asteroidBaseHealth * asteroid.scale.x;
-            //asteroid.health = 100;
             asteroid.health = asteroid.maxHealth;
 
             asteroid.inputEnabled = true;
@@ -234,8 +231,6 @@ module.exports = (function () {
             _clickEngine.setComboRewardMultiplier(_clickEngine.comboRewardMultiplier() + 1);
             clickProgress.progress = 0;
         }
-
-        _score += value.value;
     };
 
     o._processGamePowerupEffects = function () {

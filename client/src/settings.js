@@ -21,6 +21,6 @@ module.exports = {
         distanceIdleIncrement: 2.5,
         distanceClickIncrement: 5000,
         distanceBetweenSectors: 100000,
-        asteroidBaseHealth: 100
+        asteroidBaseHealth: 1000
     }
 };

@@ -6,6 +6,7 @@ module.exports = Player;
 
 function Player(id) {
     this.id = id;
+    this.balance = 0;
     this.score = 0;
     this.clicks = 0;
     this.crits = 0;
