@@ -33,34 +33,16 @@ var TRADE_ITEMS = [
         quantity: 100
     },
     {
-        name: 'Capacitors',
-        buyPrice: 2500,
-        sellPrice: 1500,
-        quantity: 100
-    },
-    {
-        name: 'Capacitors',
-        buyPrice: 2500,
-        sellPrice: 1500,
-        quantity: 100
-    },
-    {
-        name: 'Capacitors',
-        buyPrice: 2500,
-        sellPrice: 1500,
-        quantity: 100
-    },
-    {
-        name: 'Capacitors',
-        buyPrice: 2500,
-        sellPrice: 1500,
-        quantity: 100
-    },
-    {
         name: 'Food Supplies',
-        buyPrice: 200,
-        sellPrice: 50,
-        quantity: 5000
+        buyPrice: 2500,
+        sellPrice: 1500,
+        quantity: 100
+    },
+    {
+        name: 'Alcohol',
+        buyPrice: 2500,
+        sellPrice: 1500,
+        quantity: 100
     }
 ];
 
@@ -118,15 +100,32 @@ DlgStarPort.prototype._createMainPanel = function(game, x, y, width, height) {
 DlgStarPort.prototype._createTradePanel = function(game, x, y, width, height) {
     var tradePanel = this.addPanel('trade', false);
     var itemWidth = 200, itemHeight = 200;
-    var padding = this.width % itemWidth / 3;
-    var numItemsPerRow = 3;
+    var numItemsPerRow = 3; //Math.floor(this.width / itemWidth);
+    //var padding = this.width % itemWidth / numItemsPerRow;
+    var padding = Math.floor((this.width - (numItemsPerRow * itemWidth)) / numItemsPerRow) / 2;
+    var x, y;
+
+    console.log('numItemsPerRow = ' + numItemsPerRow);
+    console.log('padding = ' + padding);
+
+    x = -this.width/2 + itemWidth/2 + padding;
+    y = -this.height/2 + itemHeight/2 + this.titleHeight + padding;
 
     for ( var i = 0, len = TRADE_ITEMS.length; i < len; i++ ) {
         var item = new TradeItemWidget(game, 0, 0, itemWidth, itemHeight, TRADE_ITEMS[i]);
-        item.x = -this.width/2 + item.width/2 + padding + ((i%numItemsPerRow)*(itemWidth+padding));
-        item.y = -this.height/2 + item.height/2 + padding + this.titleHeight + (Math.floor(i/numItemsPerRow)*(itemHeight+padding));
+        item.x = padding + x;
+        item.y = y;
+
+        if ( item.x + itemWidth/2 > this.width/2 ) {
+            x = -this.width/2 + itemWidth/2 + padding;
+            y += itemHeight + padding;
+            item.x = padding + x;
+            item.y = y;
+        }
         game.world.add(item);
         tradePanel.addChild(item);
+
+        x += itemWidth + padding;
     }
 
     var backButton = new UIButton(game, 0, this.height/2-110, this.width*0.8, 100, 'Back', this.onBackButtonPressed, this);

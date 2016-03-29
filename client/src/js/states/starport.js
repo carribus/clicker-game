@@ -16,7 +16,6 @@ module.exports = (function() {
     var _lastTick = Date.now();
 
     o.preload = function() {
-
     };
 
     o.create = function() {
@@ -40,7 +39,7 @@ module.exports = (function() {
         _btnStarmap.input.useHandCursor = true;
         _btnStarmap.events.onInputDown.add(this.gotoStarmap.bind(this));
 
-        _dlgStarport = new DlgStarPort(this.game, Settings.display.width/2, Settings.display.height/2-100, Settings.display.width*0.8, Settings.display.height*0.7);
+        _dlgStarport = new DlgStarPort(this.game, Settings.display.width/2, Settings.display.height/2-100, Settings.display.width*0.9, Settings.display.height*0.7);
         this.game.world.add(_dlgStarport);
         _dlgStarport.visible = false;
         _dlgStarport.onCloseButtonPressed.add(function() {
