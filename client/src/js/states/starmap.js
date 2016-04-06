@@ -124,7 +124,7 @@ module.exports = (function() {
 
     var STARMAP_DEFINITION;
     var NUM_COLS = 7, NUM_ROWS = 5;
-    var HEX_SIZE = 120;
+    var HEX_SIZE = Math.min(Settings.display.width, Settings.display.height) / NUM_COLS;
 
     var _starmap;
     var _selectedHex;
@@ -154,7 +154,7 @@ module.exports = (function() {
         // create the pirate sprite
         _pirate = this.game.add.sprite(0, 0, 'pirate');
         _pirate.anchor.set(0.5, 0.5);
-        _pirate.scale.set(0.4);
+        _pirate.scale.set(HEX_SIZE / _pirate.height * 0.7);
 
         // create the travel button
         var text = this.game.add.text(0, 0, 'Travel', {
@@ -282,7 +282,7 @@ module.exports = (function() {
                     // create the asteroid sprite
                     _asteroid = this.game.add.sprite(0, 0, 'asteroid', 0);
                     _asteroid.anchor.set(0.5);
-                    _asteroid.scale.set(0.5);
+                    _asteroid.scale.set(HEX_SIZE / _asteroid.width * 0.5);
                     _asteroid.x = _starmap.x + hex.center().x;
                     _asteroid.y = _starmap.y + hex.center().y;
                     this.game.world.sendToBack(_asteroid);
@@ -292,7 +292,7 @@ module.exports = (function() {
                     // create the space station sprite
                     _station = this.game.add.sprite(0, 0, 'spacestation');
                     _station.anchor.set(0.5, 0.5);
-                    _station.scale.set(0.15);
+                    _station.scale.set(HEX_SIZE / _station.width * 0.6);
                     _station.x = _starmap.x + hex.center().x;
                     _station.y = _starmap.y + hex.center().y;
                     this.game.world.sendToBack(_station);
@@ -303,7 +303,6 @@ module.exports = (function() {
                 default:
                     break;
             }
-
         }
     };
 
