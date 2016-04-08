@@ -4,13 +4,18 @@ An exploration of building a clicker/idle style game
 ## Todo
 
 - Graphics resource: http://millionthvector.blogspot.com/p/free-sprites.html
+- Standard UI cruiser (at the bottom)
+    - Balance
+    - General options
 - Travel Screen
     - Watch an Ad button
     - Hyperdrive button
     - Add random encounters
         - Asteroids
+        - Deathstars
         - Other ships
-- Mining Screen
+- Mining
+    - When a starmap is generated, the asteroid field data should be generated and persisted as well
     - Fix the 'powerups' layout
     - Decide if powerups still make sense or if there should be 'mining upgrades' that are purchased and installed at spaceports
 - Create the Attack screen
