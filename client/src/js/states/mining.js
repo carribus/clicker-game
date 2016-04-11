@@ -12,8 +12,8 @@ module.exports = (function () {
 
     var _clickEngine;
     var _clickSummary;
-    var _clickTextObjects = [];
-    var _asteroids = [];
+    var _clickTextObjects;
+    var _asteroids;
     var _btnStarmap;
 
     var _currentCell, _currentIndex;
@@ -31,6 +31,14 @@ module.exports = (function () {
     var POWERUP_LINES = 3;
 
     o.preload = function () {
+        _asteroids = [];
+        _clickTextObjects = []
+        _progressBars = {
+            clickProgress: null,
+            bonusProgress: null
+        };
+        _lastTick = Date.now();
+        _activePowerups = {};
     };
 
     o.create = function () {
