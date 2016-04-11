@@ -10,7 +10,6 @@ module.exports = (function() {
 
     o.preload = function() {
         this.load.spritesheet('powerups', 'assets/images/powerups.png', 60, 63);
-        //this.load.spritesheet('spaceship2', 'assets/images/chainsaw_spaceship.gif');
         this.load.spritesheet('bugship', 'assets/images/bug_spaceship_sheet.png', 79, 39);
         this.load.spritesheet('asteroid', 'assets/images/asteroid_spritesheet.png', 128, 128);
         this.load.image('pirate', 'assets/images/yuara_pirate.png');
