@@ -3,6 +3,8 @@
  */
 
 module.exports = (function() {
+    var Settings = require('../../settings');
+
     var o = {};
     var cellTypes = [
         {
@@ -38,7 +40,6 @@ module.exports = (function() {
         for ( var i = 0, len = numCols*numRows; i < len; i++ ) {
             val = Math.random() * threshold;
 
-            // TODO: you left off here - generate celltypes based on their respective weighting
             currentMarker = 0;
             for ( var j = 0; j < cellTypes.length; j++ ) {
                 currentMarker += cellTypes[j].weight;
@@ -46,12 +47,45 @@ module.exports = (function() {
                     break;
                 }
             }
-            map.map.push({
-                cellType: cellTypes[j].type
-            });
+
+            //map.map.push({
+            //    cellType: cellTypes[j].type
+            //});
+            map.map.push(this.configureCell(cellTypes[j].type));
         }
 
         return map;
+    };
+
+    o.configureCell = function(cellType) {
+        var cell = {
+            cellType: cellType,
+            data: {}
+        };
+
+        switch ( cellType ) {
+            case    'asteroids':
+                var numAsteroids = 3 + Math.floor(Math.random() * 10);
+
+                cell.data.asteroids = [];
+                for ( var i = 0; i < numAsteroids; i++ ) {
+                    var size = 1 + Math.floor(Math.random() * 3);
+                    cell.data.asteroids.push({
+                        size: size,
+                        maxHealth: Settings.gameMechanics.asteroidBaseHealth * size,
+                        health: Settings.gameMechanics.asteroidBaseHealth * size
+                    })
+                }
+                break;
+
+            case    'starport':
+                break;
+
+            case    'empty':
+                break;
+        }
+
+        return cell;
     };
 
     return o;

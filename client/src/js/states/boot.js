@@ -5,8 +5,6 @@
 module.exports = (function() {
     var settings = require('../../settings');
     var ClickerEngine = require('../models/clickerengine');
-    var ShopEngine = require('../models/shopengine');
-    var PowerupList = require('../powerups/poweruplist');
     var Player = require('../models/player');
     var o = {};
 
@@ -22,7 +20,6 @@ module.exports = (function() {
     };
 
     o.create = function() {
-
         // ensure that during scaling, the original proportions are maintained
         this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 
@@ -38,25 +35,13 @@ module.exports = (function() {
             this.game.player = JSON.parse(this.game.player);
         }
 
-        //console.log('Player: ' + JSON.stringify(this.game.player));
-
         this.game.scale.pageAlignHorizontally = true;
         this.game.scale.pageAlignVertically = true;
         this.game.scale.refresh();
 
-        this.game.shop = new ShopEngine();
-        configureShop(this.game.shop);
-
         // lets move along!
         this.state.start('preload');
-
     };
-
-    function configureShop(shop) {
-        PowerupList.forEach(function(powerup) {
-            shop.add('powerups', powerup);
-        });
-    }
 
     function generateID() {
         function s4() {

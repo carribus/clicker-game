@@ -16,6 +16,8 @@ module.exports = (function () {
     var _asteroids = [];
     var _btnStarmap;
 
+    var _currentCell, _currentIndex;
+
     var _progressBars = {
         clickProgress: null,
         bonusProgress: null
@@ -33,6 +35,11 @@ module.exports = (function () {
 
     o.create = function () {
         var i;
+
+        _currentIndex = this.game.player.travel.toHex;
+        _currentCell = this.game.player.starmap.map[_currentIndex]
+        console.log(this.game.player.travel);
+        console.log(_currentCell);
 
         _clickEngine = new ClickerEngine();
         _clickEngine.setScore(this.game.player.score || 0);
@@ -60,10 +67,12 @@ module.exports = (function () {
         _progressBars.bonusProgress.refresh();
 
         // create the asteroid(s)
-        var numAsteroids = 3 + Math.floor(Math.random() * 10);
+        var numAsteroids = _currentCell.data.asteroids.length;
         for (i = 0; i < numAsteroids; i++) {
+            if ( _currentCell.data.asteroids[i].health <= 0 )   continue;
+
             var asteroid = this.game.add.sprite(Settings.display.width / 2, Settings.display.height / 2, 'asteroid', 0);
-            asteroid.scale.set(1 + Math.floor(Math.random() * 3));
+            asteroid.scale.set(_currentCell.data.asteroids[i].size);
             asteroid.x = 100 + Math.random() * (Settings.display.width - 100 - asteroid.width);
             asteroid.y = 150 + Math.random() * (Settings.display.height - 150 - asteroid.height * 2);
             // generate the animation frame array
@@ -73,8 +82,11 @@ module.exports = (function () {
             asteroid.animations.add('rotate', asteroidFrameArray, 10, true);
             asteroid.animations.play('rotate');
 
-            asteroid.maxHealth = Settings.gameMechanics.asteroidBaseHealth * asteroid.scale.x;
-            asteroid.health = asteroid.maxHealth;
+            // attach the asteroid's model data to the sprite for easy reference
+            asteroid.model = _currentCell.data.asteroids[i];
+            // set the sprite's health object
+            asteroid.maxHealth = _currentCell.data.asteroids[i].maxHealth;
+            asteroid.health = _currentCell.data.asteroids[i].health;
 
             asteroid.inputEnabled = true;
             asteroid.events.onInputDown.add(function (target, pointer) {
@@ -199,6 +211,8 @@ module.exports = (function () {
             _clickTextObjects.push(txt);
 
             target.damage(value.value);
+            target.model.health = target.health > 0 ? target.health : 0;
+
         } else {
             // no asteroids left so we should stop the auto-click powerup
             for (k in _activePowerups) {

@@ -5,6 +5,8 @@
 module.exports = (function() {
     var o = {};
     var StarmapGenerator = require('../starmap/starmapgenerator');
+    var ShopEngine = require('../models/shopengine');
+    var PowerupList = require('../powerups/poweruplist');
 
     o.preload = function() {
         this.load.spritesheet('powerups', 'assets/images/powerups.png', 60, 63);
@@ -37,13 +39,21 @@ module.exports = (function() {
             }
         }
 
+        this.game.shop = new ShopEngine();
+        this.configureShop(this.game.shop);
+
         // lets move along!
         this.state.start(lastState);
-
     };
 
     o.update = function() {
     };
+
+    o.configureShop = function(shop) {
+        PowerupList.forEach(function(powerup) {
+            shop.add('powerups', powerup);
+        });
+    }
 
     return o;
 })();
