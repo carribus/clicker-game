@@ -15,7 +15,6 @@ An exploration of building a clicker/idle style game
         - Deathstars
         - Other ships
 - Mining
-    - When a starmap is generated, the asteroid field data should be generated and persisted as well
     - Fix the 'powerups' layout
     - Decide if powerups still make sense or if there should be 'mining upgrades' that are purchased and installed at spaceports
 - Create the Attack screen

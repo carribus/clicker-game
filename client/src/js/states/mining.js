@@ -32,7 +32,7 @@ module.exports = (function () {
 
     o.preload = function () {
         _asteroids = [];
-        _clickTextObjects = []
+        _clickTextObjects = [];
         _progressBars = {
             clickProgress: null,
             bonusProgress: null
@@ -45,9 +45,7 @@ module.exports = (function () {
         var i;
 
         _currentIndex = this.game.player.travel.toHex;
-        _currentCell = this.game.player.starmap.map[_currentIndex]
-        console.log(this.game.player.travel);
-        console.log(_currentCell);
+        _currentCell = this.game.player.starmap.map[_currentIndex];
 
         _clickEngine = new ClickerEngine();
         _clickEngine.setScore(this.game.player.score || 0);
@@ -261,7 +259,6 @@ module.exports = (function () {
             if (_activePowerups[powerupKeys[i]].expired) {
                 console.log('Removing powerup: ' + powerupKeys[i]);
                 delete _activePowerups[powerupKeys[i]];
-
             }
         }
     };
