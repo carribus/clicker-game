@@ -55,6 +55,7 @@ function DlgStarPort(game, x, y, width, height) {
     // construct the UI objects
     this._createMainPanel(game, x, y, width, height);
     this._createTradePanel(game, x, y, width, height);
+    this._createUpgradesPanel(game, x, y, width, height);
 
 }
 
@@ -63,13 +64,14 @@ DlgStarPort.prototype.constructor = DlgStarPort;
 
 DlgStarPort.prototype.onTradeButtonPressed = function() {
     console.log('Trade button pressed');
-    this.showPanel('trade', true);
-    this.showPanel('main', false);
+    this.switchToPanel('trade');
     this.setTitle('Starport Options: Trade');
 };
 
 DlgStarPort.prototype.onUpgradesButtonPressed= function() {
     console.log('Upgrades button pressed');
+    this.switchToPanel('upgrades');
+    this.setTitle('Starport options: Upgrades');
 };
 
 DlgStarPort.prototype.onShipButtonPressed = function() {
@@ -77,10 +79,13 @@ DlgStarPort.prototype.onShipButtonPressed = function() {
 };
 
 DlgStarPort.prototype.onBackButtonPressed = function() {
+    this.switchToPanel('main');
+};
+
+DlgStarPort.prototype.switchToPanel = function(panelName) {
     for ( k in this.panels ) {
-        this.panels[k].visible = false;
+        this.panels[k].visible = (k == panelName);
     }
-    this.panels.main.visible = true;
 };
 
 DlgStarPort.prototype._createMainPanel = function(game, x, y, width, height) {
@@ -132,4 +137,16 @@ DlgStarPort.prototype._createTradePanel = function(game, x, y, width, height) {
     var backButton = new UIButton(game, 0, this.height/2-110, this.width*0.8, 100, 'Back', this.onBackButtonPressed, this);
     backButton.anchor.set(0.5);
     tradePanel.addChild(backButton);
+};
+
+DlgStarPort.prototype._createUpgradesPanel = function(game, x, y, width, height) {
+    var panel = this.addPanel('upgrades', false);
+
+    var upgrades = [
+        {
+
+        }
+    ]
+
+
 };
